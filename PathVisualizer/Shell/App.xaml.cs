@@ -1,6 +1,7 @@
 ﻿using Prism.Ioc;
 using Shell.Views;
 using System.Windows;
+using Prism.Modularity;
 
 namespace Shell
 {
@@ -17,6 +18,22 @@ namespace Shell
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
 
+        }
+
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        {
+            var catalog = new DirectoryModuleCatalog {ModulePath = @".\ExtensionModules"};
+            catalog.Load();
+            
+            foreach (var module in catalog.Modules)
+            {
+                moduleCatalog.AddModule(new ModuleInfo()
+                {
+                    ModuleName = module.ModuleName,
+                    ModuleType = module.ModuleType,
+                    InitializationMode = InitializationMode.WhenAvailable
+                });
+            }
         }
     }
 }
