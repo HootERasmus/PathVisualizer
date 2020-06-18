@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib", "Lib\Lib.csproj", "{6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLoader", "DataLoader\DataLoader.csproj", "{1B604551-6102-4A0A-B3D5-5D00D5E530B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filters", "Filters\Filters.csproj", "{9BBC1BDE-0ABA-48A3-8ECF-10E7C335223A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filters", "Filters\Filters.csproj", "{9BBC1BDE-0ABA-48A3-8ECF-10E7C335223A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlotSettings", "PlotSettings\PlotSettings.csproj", "{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{9BBC1BDE-0ABA-48A3-8ECF-10E7C335223A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BBC1BDE-0ABA-48A3-8ECF-10E7C335223A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BBC1BDE-0ABA-48A3-8ECF-10E7C335223A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,8 +19,6 @@ namespace LinePlot.ViewModels
 
         private readonly IEventAggregator _eventAggregator;
 
-        public string Message { get; set; }
-
         public LinePlotViewModel(IEventAggregator eventAggregator)
         {
             MyPlotModel = new PlotModel();
