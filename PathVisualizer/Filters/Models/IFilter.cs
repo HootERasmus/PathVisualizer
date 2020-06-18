@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Lib.SharedModels;
 
 namespace Filters.Models
 {
     public interface IFilter
     {
-        public void Filter();
+        public Task<List<TimeCoordinate>> Filter(List<TimeCoordinate> originalData);
         public string Name { get; }
     }
 }

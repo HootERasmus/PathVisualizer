@@ -3,7 +3,7 @@ using Prism.Events;
 
 namespace Filters.Events
 {
-    public class FilterEvent : PubSubEvent<IFilter>
+    public class FilterSelectionEvent : PubSubEvent<IFilter>
     {
     }
 }

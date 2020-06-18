@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using DataPanel.Models;
 using Lib.Events;
 using Lib.SharedModels;
 using Prism.Events;
@@ -21,7 +20,7 @@ namespace DataPanel.ViewModels
 
                 _selectedTag = value;
                 RaisePropertyChanged();
-                _eventAggregator.GetEvent<TagEvent>().Publish(SelectedTag);
+                _eventAggregator.GetEvent<TagSelectionEvent>().Publish(SelectedTag);
             }
         }
 

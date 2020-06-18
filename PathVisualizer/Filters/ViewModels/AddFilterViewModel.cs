@@ -46,7 +46,7 @@ namespace Filters.ViewModels
 
         private void AddAction()
         {
-            _eventAggregator.GetEvent<FilterEvent>().Publish(SelectedFilter);
+            _eventAggregator.GetEvent<FilterSelectionEvent>().Publish(SelectedFilter);
             CancelCommand.Execute();
         }
 

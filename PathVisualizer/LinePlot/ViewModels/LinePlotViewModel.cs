@@ -1,5 +1,6 @@
 ﻿using Prism.Mvvm;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using Lib.Events;
 using Lib.SharedModels;
@@ -27,19 +28,20 @@ namespace LinePlot.ViewModels
             MyPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left });
 
             _eventAggregator = eventAggregator;
-            _eventAggregator.GetEvent<TagEvent>().Subscribe(PlotLine);
+            _eventAggregator.GetEvent<TagFilterEvent>().Subscribe(PlotLine);
         }
 
-        private void PlotLine(Tag tag)
+        private async void PlotLine(Tag tag)
         {
-           
-            _dataPoints = ConvertIntoDataPoints(tag);
-            MyPlotModel.Series.Add(new LineSeries{ItemsSource = _dataPoints});
-            
-            RaisePropertyChanged(nameof(MyPlotModel));
-            MyPlotModel.InvalidatePlot(true);
+            await Task.Run(() =>
+            {
+                MyPlotModel.Series.Clear();
+                _dataPoints = ConvertIntoDataPoints(tag);
+                MyPlotModel.Series.Add(new LineSeries {ItemsSource = _dataPoints});
 
-
+                RaisePropertyChanged(nameof(MyPlotModel));
+                MyPlotModel.InvalidatePlot(true);
+            });
         }
 
         private List<DataPoint> ConvertIntoDataPoints(Tag tag)

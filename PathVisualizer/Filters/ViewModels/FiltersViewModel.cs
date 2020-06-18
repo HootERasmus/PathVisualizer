@@ -54,14 +54,18 @@ namespace Filters.ViewModels
             _eventAggregator.GetEvent<OperationEvent>().Subscribe(CloseAddFilterWindow, ThreadOption.UIThread, false,
                 x => x.ViewName == nameof(AddFilterWindow) && x.OperationType == OperationType.Close);
 
-            _eventAggregator.GetEvent<FilterEvent>().Subscribe(AddFilterToCollection, ThreadOption.UIThread, false);
+            _eventAggregator.GetEvent<FilterSelectionEvent>().Subscribe(AddFilterToCollection, ThreadOption.UIThread, false);
+            _eventAggregator.GetEvent<TagSelectionEvent>().Subscribe(ApplyFilters, ThreadOption.UIThread);
         }
 
         private void AddFilterAction()
         {
-            _addFilterWindow = new AddFilterWindow {DataContext = new AddFilterViewModel(_eventAggregator)};
+            _addFilterWindow = new AddFilterWindow
+            {
+                DataContext = new AddFilterViewModel(_eventAggregator),
+                WindowStartupLocation = WindowStartupLocation.Manual
+            };
 
-            _addFilterWindow.WindowStartupLocation = WindowStartupLocation.Manual;
             _addFilterWindow.Show();
         }
 
@@ -100,6 +104,18 @@ namespace Filters.ViewModels
         private void AddFilterToCollection(IFilter filter)
         {
             FiltersInUse.Add(filter);
+        }
+
+        private async void ApplyFilters(Tag tag)
+        {
+            var tempData = tag.TimeCoordinates;
+
+            foreach (var filter in FiltersInUse)
+            {
+                tempData = await filter.Filter(tempData);
+            }
+
+            _eventAggregator.GetEvent<TagFilterEvent>().Publish(new Tag(tag.Id, tempData));
         }
 
         public static void Swap<T>(IList<T> list, int indexA, int indexB)
