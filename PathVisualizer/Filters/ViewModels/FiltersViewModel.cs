@@ -18,6 +18,7 @@ namespace Filters.ViewModels
         public DelegateCommand RemoveFilterCommand { get; set; }
         public DelegateCommand MoveFilterDownCommand { get; set; }
         public DelegateCommand MoveFilterUpCommand { get; set; }
+        public DelegateCommand ClosingCommand { get; set; }
         
         public ObservableCollection<IFilter> FiltersInUse { get; set; }
 
@@ -38,6 +39,7 @@ namespace Filters.ViewModels
 
         private readonly IEventAggregator _eventAggregator;
         private AddFilterWindow _addFilterWindow;
+        private Tag _lastTag;
 
         public FiltersViewModel(IEventAggregator eventAggregator)
         {
@@ -45,13 +47,17 @@ namespace Filters.ViewModels
             RemoveFilterCommand = new DelegateCommand(RemoveFilterAction);
             MoveFilterDownCommand = new DelegateCommand(MoveFilterDownAction, CanMoveFilterDown);
             MoveFilterUpCommand = new DelegateCommand(MoveFilterUpAction, CanMoveFilterUp);
-        
+            ClosingCommand = new DelegateCommand(ClosingAction);
+
             FiltersInUse = new ObservableCollection<IFilter>();
+
+            _lastTag = new Tag("", new List<TimeCoordinate>());
 
             _eventAggregator = eventAggregator;
 
             _eventAggregator.GetEvent<FilterSelectionEvent>().Subscribe(AddFilterToCollection, ThreadOption.UIThread, false);
             _eventAggregator.GetEvent<TagSelectionEvent>().Subscribe(ApplyFilters, ThreadOption.UIThread);
+
         }
 
         private void AddFilterAction()
@@ -99,6 +105,10 @@ namespace Filters.ViewModels
 
         private async void ApplyFilters(Tag tag)
         {
+            if(tag == null) return;
+            
+            _lastTag = tag;
+
             var tempData = tag.TimeCoordinates;
 
             foreach (var filter in FiltersInUse)
@@ -114,6 +124,11 @@ namespace Filters.ViewModels
             T tmp = list[indexA];
             list[indexA] = list[indexB];
             list[indexB] = tmp;
+        }   
+
+        private void ClosingAction()
+        {
+            ApplyFilters(_lastTag);
         }
     }
 }

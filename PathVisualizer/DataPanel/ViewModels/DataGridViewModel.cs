@@ -37,6 +37,8 @@ namespace DataPanel.ViewModels
 
         private void ShowTags(DataEventModel model)
         {
+            Tags.Clear();
+
             foreach (var tag in model.Tags)
             {
                 Tags.Add(tag);

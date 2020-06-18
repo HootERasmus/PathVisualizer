@@ -10,7 +10,7 @@
              Background="Brown">
 
     <Grid>
-        <DataGrid ItemsSource="{Binding Tags}" SelectedItem="{Binding SelectedTag}" AutoGenerateColumns="False">
+        <DataGrid ItemsSource="{Binding Tags}" SelectedItem="{Binding SelectedTag}" AutoGenerateColumns="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Tag Id" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Count" Binding="{Binding TimeCoordinates.Count}"/>

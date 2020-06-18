@@ -10,7 +10,17 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
-        <Image Source="{Binding BackgroundImage}" Stretch="Fill"/>
-        <oxy:PlotView Model="{Binding MyPlotModel}" Background="Transparent" Grid.Column="0" Grid.Row="0"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="53"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="56"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="8"/>
+        </Grid.ColumnDefinitions>
+        <Image Source="{Binding BackgroundImage}" Stretch="Fill" Grid.Row="1" Grid.Column="1"/>
+        <oxy:PlotView Model="{Binding MyPlotModel}" Background="Transparent" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
     </Grid>
 </UserControl>
