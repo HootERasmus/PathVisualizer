@@ -83,7 +83,7 @@ namespace DataLoader.ViewModels
                 RaisePropertyChanged(nameof(Tags));
             });
 
-            _eventAggregator.GetEvent<DataEvent>().Publish(new TagEventModel(Tags, TagEventType.Loaded));
+            _eventAggregator.GetEvent<DataEvent>().Publish(new DataEventModel(Tags, TagEventType.Loaded));
         }
     }
 }

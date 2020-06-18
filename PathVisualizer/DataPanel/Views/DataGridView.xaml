@@ -8,8 +8,14 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True" 
              Background="Brown">
+
     <Grid>
-        <DataGrid ItemsSource="{Binding Tags}" SelectedItem="{Binding SelectedTag}" IsReadOnly="True"/>
+        <DataGrid ItemsSource="{Binding Tags}" SelectedItem="{Binding SelectedTag}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tag Id" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Count" Binding="{Binding TimeCoordinates.Count}"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
     </Grid>
 </UserControl>

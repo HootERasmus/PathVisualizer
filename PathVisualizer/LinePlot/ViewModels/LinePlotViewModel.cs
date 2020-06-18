@@ -1,25 +1,57 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using System;
+﻿using Prism.Mvvm;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Media;
+using Lib.Events;
+using Lib.SharedModels;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using Prism.Events;
 
 namespace LinePlot.ViewModels
 {
     public class LinePlotViewModel : BindableBase
     {
-        private string _message;
-        public string Message
+        public PlotModel MyPlotModel { get; set; }
+
+        private List<DataPoint> _dataPoints;
+
+        private readonly IEventAggregator _eventAggregator;
+
+        public string Message { get; set; }
+
+        public LinePlotViewModel(IEventAggregator eventAggregator)
         {
-            get { return _message; }
-            set { SetProperty(ref _message, value); }
+            MyPlotModel = new PlotModel();
+            MyPlotModel.Axes.Add( new LinearAxis{Position = AxisPosition.Bottom});
+            MyPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left });
+
+            _eventAggregator = eventAggregator;
+            _eventAggregator.GetEvent<TagEvent>().Subscribe(PlotLine);
         }
 
-        public LinePlotViewModel()
+        private void PlotLine(Tag tag)
         {
-            Message = "View A from your Prism Module";
+           
+            _dataPoints = ConvertIntoDataPoints(tag);
+            MyPlotModel.Series.Add(new LineSeries{ItemsSource = _dataPoints});
+            
+            RaisePropertyChanged(nameof(MyPlotModel));
+            MyPlotModel.InvalidatePlot(true);
+
+
+        }
+
+        private List<DataPoint> ConvertIntoDataPoints(Tag tag)
+        {
+            var points = new List<DataPoint>();
+
+            foreach (var timeCoordinate in tag.TimeCoordinates)
+            {
+                points.Add(new DataPoint(timeCoordinate.X, timeCoordinate.Y));
+            }
+
+            return points;
         }
     }
 }

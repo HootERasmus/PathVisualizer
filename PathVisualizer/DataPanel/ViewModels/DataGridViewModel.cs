@@ -9,7 +9,7 @@ namespace DataPanel.ViewModels
 {
     public class DataGridViewModel : BindableBase
     {
-        public ObservableCollection<DataGridTagModel> Tags { get; set; }
+        public ObservableCollection<Tag> Tags { get; set; }
 
         private Tag _selectedTag;
         public Tag SelectedTag
@@ -21,23 +21,26 @@ namespace DataPanel.ViewModels
 
                 _selectedTag = value;
                 RaisePropertyChanged();
+                _eventAggregator.GetEvent<TagEvent>().Publish(SelectedTag);
             }
         }
 
+        private readonly IEventAggregator _eventAggregator;
+
         public DataGridViewModel(IEventAggregator eventAggregator)
         {
-            Tags = new ObservableCollection<DataGridTagModel>();
+            Tags = new ObservableCollection<Tag>();
 
-            var dataEvent = eventAggregator.GetEvent<DataEvent>();
-            dataEvent.Subscribe(ShowTags, ThreadOption.UIThread, false, x => x.EventType == Lib.TagEventType.Loaded);
+            _eventAggregator = eventAggregator;
+            _eventAggregator.GetEvent<DataEvent>().Subscribe(ShowTags, ThreadOption.UIThread, false, x => x.EventType == Lib.TagEventType.Loaded);
 
         }
 
-        private void ShowTags(TagEventModel model)
+        private void ShowTags(DataEventModel model)
         {
             foreach (var tag in model.Tags)
             {
-                Tags.Add(new DataGridTagModel(tag.Id, tag.Count));
+                Tags.Add(tag);
             }
         }
     }

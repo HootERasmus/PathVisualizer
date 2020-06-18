@@ -2,9 +2,9 @@
 
 namespace Lib.SharedModels
 {
-    public class TagEventModel
+    public class DataEventModel
     {
-        public TagEventModel(List<Tag> tags, TagEventType eventType)
+        public DataEventModel(List<Tag> tags, TagEventType eventType)
         {
             Tags = tags;
             EventType = eventType;
