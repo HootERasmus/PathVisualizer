@@ -28,8 +28,8 @@ namespace DataPanel.ViewModels
         {
             Tags = new ObservableCollection<DataGridTagModel>();
 
-           var dataEvent = eventAggregator.GetEvent<DataEvent>();
-           dataEvent.Subscribe(ShowTags, ThreadOption.UIThread, false, x => x.EventType == Lib.TagEventType.Loaded);
+            var dataEvent = eventAggregator.GetEvent<DataEvent>();
+            dataEvent.Subscribe(ShowTags, ThreadOption.UIThread, false, x => x.EventType == Lib.TagEventType.Loaded);
 
         }
 

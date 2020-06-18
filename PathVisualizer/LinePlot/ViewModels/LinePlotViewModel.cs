@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LinePlot.ViewModels
 {
-    public class ViewAViewModel : BindableBase
+    public class LinePlotViewModel : BindableBase
     {
         private string _message;
         public string Message
@@ -17,7 +17,7 @@ namespace LinePlot.ViewModels
             set { SetProperty(ref _message, value); }
         }
 
-        public ViewAViewModel()
+        public LinePlotViewModel()
         {
             Message = "View A from your Prism Module";
         }

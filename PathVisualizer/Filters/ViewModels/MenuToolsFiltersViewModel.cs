@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Filters.Views;
+using Prism.Events;
 
 namespace Filters.ViewModels
 {
@@ -13,14 +14,17 @@ namespace Filters.ViewModels
     {
         public DelegateCommand OpenFilterWindowCommand { get; set; }
 
-        public MenuToolsFiltersViewModel()
+        private readonly IEventAggregator _eventAggregator;
+
+        public MenuToolsFiltersViewModel(IEventAggregator eventAggregator)
         {
             OpenFilterWindowCommand = new DelegateCommand(OpenFilterWindowAction);
+            _eventAggregator = eventAggregator;
         }
 
         private void OpenFilterWindowAction()
         {
-            var window = new FiltersWindow {DataContext = new FiltersViewModel()};
+            var window = new FiltersWindow {DataContext = new FiltersViewModel(_eventAggregator)};
             window.Show();
         }
     }
