@@ -1,0 +1,53 @@
+﻿<Window x:Class="PlotSettings.Views.PlotSettingsWindow"
+        x:Name="PlotSettingsWindowName"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PlotSettings.Views"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
+        mc:Ignorable="d"
+        Title="PlotSettingsWindow" Height="450" Width="300">
+
+    <Window.Resources>
+        <DataTemplate x:Key="ShowColor" DataType="system:String">
+            <StackPanel Orientation="Horizontal">
+                <Rectangle Fill="{Binding }" Width="16" Height="16" Margin="0 2 5 2" />
+                <TextBlock Text="{Binding }" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="195*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" Text="X-Axis title" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
+        <TextBox HorizontalAlignment="Left" Margin="155,20,0,0" Text="{Binding Settings.XAxisTitle}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="0"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,40,0,0" Text="Y-Axis title" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
+        <TextBox HorizontalAlignment="Left" Margin="155,40,0,0" Text="{Binding Settings.YAxisTitle}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="0"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="20,80,0,0" Text="X-Axis minimum" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
+        <TextBox HorizontalAlignment="Left" Margin="155,80,0,0" Text="{Binding Settings.XAxisMinimum}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="0"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,100,0,0" Text="X-Axis maximum" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
+        <TextBox HorizontalAlignment="Left" Margin="155,100,0,0" Text="{Binding Settings.XAxisMaximum}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="0"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="20,140,0,0" Text="Y-Axis minimum" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
+        <TextBox HorizontalAlignment="Left" Margin="155,140,0,0" Text="{Binding Settings.YAxisMinimum}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="0"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,160,0,0" Text="Y-Axis maximum" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
+        <TextBox HorizontalAlignment="Left" Margin="155,160,0,0" Text="{Binding Settings.YAxisMaximum}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="0"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="20,205,0,0" Text="Background" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
+        <Button HorizontalAlignment="Left" Margin="155,200,0,0" Content="Browse" Command="{Binding BrowseImageCommand}" VerticalAlignment="Top" Width="120" Grid.Row="0"/>
+        <TextBlock HorizontalAlignment="Left" Margin="300,205,0,0" Text="{Binding BackgroundImage}" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,230,0,0" Text="Line plot color" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
+        <ComboBox ItemsSource="{Binding Colors}" SelectedItem="{Binding Settings.LineColor}" ItemTemplate="{StaticResource ShowColor}" HorizontalAlignment="Left" Margin="155,225,0,0"  VerticalAlignment="Top" Width="120" Grid.Row="0"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,255,0,0" Text="Dot plot color" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
+        <ComboBox ItemsSource="{Binding Colors}" SelectedItem="{Binding Settings.DotColor}" ItemTemplate="{StaticResource ShowColor}" HorizontalAlignment="Left" Margin="155,250,0,0" VerticalAlignment="Top" Width="120" Grid.Row="0"/>
+        <Border Background="AliceBlue" Grid.Row="1"/>
+
+        <Button Content="OK" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=PlotSettingsWindowName}" Grid.Row="1" Width="60" Height="20" HorizontalAlignment="Left" Margin="10,10,10,10"/>
+        <Button Content="Cancel" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=PlotSettingsWindowName}" Grid.Row="1" Width="60" Height="20" HorizontalAlignment="Left" Margin="80,10,10,10"/>
+        <Button Content="Apply" Command="{Binding ApplyCommand}" Grid.Row="1" Width="60" Height="20" HorizontalAlignment="Right" Margin="10,10,10,10"/>
+    </Grid>
+</Window>

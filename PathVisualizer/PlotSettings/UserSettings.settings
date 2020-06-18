@@ -1,0 +1,40 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
+  <Profiles/>
+  <Settings>
+    <Setting Name="XAxisTitle" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Meter</Value>
+    </Setting>
+    <Setting Name="YAxisTitle" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Meter</Value>
+    </Setting>
+
+    <Setting Name="XAxisMinimum" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">-10</Value>
+    </Setting>
+    <Setting Name="XAxisMaximum" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+
+    <Setting Name="YAxisMinimum" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">-15</Value>
+    </Setting>
+    <Setting Name="YAxisMaximum" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+
+    <Setting Name="BackgroundImagePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+
+    <Setting Name="LineColor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Black</Value>
+    </Setting>
+
+    <Setting Name="DotColor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Black</Value>
+    </Setting>
+    
+  </Settings>
+  
+</SettingsFile>

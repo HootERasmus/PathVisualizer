@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using Filters.Events;
 using Filters.Models;
 using Filters.Views;
@@ -29,8 +30,8 @@ namespace Filters.ViewModels
             }
         }
 
-        public DelegateCommand AddCommand { get; set; }
-        public DelegateCommand CancelCommand { get; set; }
+        public DelegateCommand<Window> AddCommand { get; set; }
+        public DelegateCommand<Window> CancelCommand { get; set; }
 
         private readonly IEventAggregator _eventAggregator;
 
@@ -38,26 +39,26 @@ namespace Filters.ViewModels
         {
             Filters = new ObservableCollection<IFilter> {new MovingAverageFilterModel(), new RemoveDeltaFilterModel()};
 
-            AddCommand = new DelegateCommand(AddAction, CanAddAction);
-            CancelCommand = new DelegateCommand(CancelAction);
+            AddCommand = new DelegateCommand<Window>(AddAction, CanAddAction);
+            CancelCommand = new DelegateCommand<Window>(CancelAction);
 
             _eventAggregator = eventAggregator;
         }
 
-        private void AddAction()
+        private void AddAction(Window window)
         {
             _eventAggregator.GetEvent<FilterSelectionEvent>().Publish(SelectedFilter);
-            CancelCommand.Execute();
+            CancelCommand.Execute(window);
         }
 
-        private bool CanAddAction()
+        private bool CanAddAction(Window window)
         {
             return SelectedFilter != null;
         }
 
-        private void CancelAction()
+        private void CancelAction(Window window)
         {
-            _eventAggregator.GetEvent<OperationEvent>().Publish(new OperationEventModel(nameof(AddFilterWindow), OperationType.Close));
+            window.Close();
         }
     }
 }

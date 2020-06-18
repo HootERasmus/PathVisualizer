@@ -1,13 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace Filters.Views
+namespace PlotSettings.Views
 {
     /// <summary>
     /// Interaction logic for ViewA.xaml
     /// </summary>
-    public partial class MenuToolsFiltersView : UserControl
+    public partial class MenuViewPlotSettingsView : UserControl
     {
-        public MenuToolsFiltersView()
+        public MenuViewPlotSettingsView()
         {
             InitializeComponent();
         }

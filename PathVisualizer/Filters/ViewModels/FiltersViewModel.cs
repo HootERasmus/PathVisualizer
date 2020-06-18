@@ -4,7 +4,6 @@ using System.Windows;
 using Filters.Events;
 using Filters.Models;
 using Filters.Views;
-using Lib;
 using Lib.Events;
 using Lib.SharedModels;
 using Prism.Commands;
@@ -51,9 +50,6 @@ namespace Filters.ViewModels
 
             _eventAggregator = eventAggregator;
 
-            _eventAggregator.GetEvent<OperationEvent>().Subscribe(CloseAddFilterWindow, ThreadOption.UIThread, false,
-                x => x.ViewName == nameof(AddFilterWindow) && x.OperationType == OperationType.Close);
-
             _eventAggregator.GetEvent<FilterSelectionEvent>().Subscribe(AddFilterToCollection, ThreadOption.UIThread, false);
             _eventAggregator.GetEvent<TagSelectionEvent>().Subscribe(ApplyFilters, ThreadOption.UIThread);
         }
@@ -94,11 +90,6 @@ namespace Filters.ViewModels
         private bool CanMoveFilterUp()
         {
             return FiltersInUse.IndexOf(SelectedFilter) > 0;
-        }
-
-        private void CloseAddFilterWindow(OperationEventModel model)
-        {
-            _addFilterWindow.Close();
         }
 
         private void AddFilterToCollection(IFilter filter)

@@ -5,14 +5,14 @@ using Prism.Events;
 
 namespace Filters.ViewModels
 {
-    public class MenuToolsFiltersViewModel : BindableBase
+    public class MenuToolFilterViewModel : BindableBase
     {
         public DelegateCommand OpenFilterWindowCommand { get; set; }
 
         private readonly IEventAggregator _eventAggregator;
         private readonly FiltersViewModel _filtersViewModel;
 
-        public MenuToolsFiltersViewModel(IEventAggregator eventAggregator)
+        public MenuToolFilterViewModel(IEventAggregator eventAggregator)
         {
             OpenFilterWindowCommand = new DelegateCommand(OpenFilterWindowAction);
             

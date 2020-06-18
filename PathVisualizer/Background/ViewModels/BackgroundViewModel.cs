@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlotSettings.ViewModels
+namespace Background.ViewModels
 {
-    public class ViewAViewModel : BindableBase
+    public class BackgroundViewModel : BindableBase
     {
         private string _message;
         public string Message
@@ -17,7 +17,7 @@ namespace PlotSettings.ViewModels
             set { SetProperty(ref _message, value); }
         }
 
-        public ViewAViewModel()
+        public BackgroundViewModel()
         {
             Message = "View A from your Prism Module";
         }

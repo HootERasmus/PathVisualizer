@@ -2,7 +2,6 @@
 {
     public enum TagEventType
     {
-        Loaded,
-        Filtered
+        Loaded
     }
 }

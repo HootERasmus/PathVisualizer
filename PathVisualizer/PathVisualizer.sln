@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLoader", "DataLoader\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filters", "Filters\Filters.csproj", "{9BBC1BDE-0ABA-48A3-8ECF-10E7C335223A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlotSettings", "PlotSettings\PlotSettings.csproj", "{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlotSettings", "PlotSettings\PlotSettings.csproj", "{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
