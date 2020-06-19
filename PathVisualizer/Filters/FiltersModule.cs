@@ -9,17 +9,17 @@ namespace Filters
     {
         public FiltersModule(IRegionManager regionManager)
         {
-            regionManager.RegisterViewWithRegion(Lib.RegionNames.MenuRegionTools, typeof(MenuToolsFiltersView));
+            regionManager.RegisterViewWithRegion(Lib.RegionNames.MenuRegionTool, typeof(MenuToolFilterView));
         }
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<MenuToolsFiltersView>();
+            containerProvider.Resolve<MenuToolFilterView>();
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<MenuToolsFiltersView>();
+            containerRegistry.Register<MenuToolFilterView>();
         }
     }
 }

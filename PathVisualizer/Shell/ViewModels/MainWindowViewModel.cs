@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using System.Windows.Automation;
+using Prism.Mvvm;
 
 namespace Shell.ViewModels
 {
@@ -13,7 +14,7 @@ namespace Shell.ViewModels
 
         public MainWindowViewModel()
         {
-
+            
         }
     }
 }

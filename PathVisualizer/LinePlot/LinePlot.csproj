@@ -5,10 +5,12 @@
     <AssemblyName>LinePlot</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="OxyPlot.Wpf" Version="2.0.0" />
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1422" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lib\Lib.csproj" />
+    <ProjectReference Include="..\Pipeline\Pipeline.csproj" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /Y $(TargetPath) $(SolutionDir)\Shell\bin\Debug\netcoreapp3.0\ExtensionModules" />

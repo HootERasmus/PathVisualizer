@@ -3,7 +3,7 @@ using Prism.Events;
 
 namespace Lib.Events
 {
-    public class DataEvent : PubSubEvent<DataEventModel>
+    public class TagSelectionEvent : PubSubEvent<Tag>
     {
     }
 }

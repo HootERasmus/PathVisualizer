@@ -18,8 +18,11 @@
             <MenuItem Header="File">
                 <ItemsControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.MenuRegionFile}"/>
             </MenuItem>
+            <MenuItem Header="View">
+                <ItemsControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.MenuRegionView}"/>
+            </MenuItem>
             <MenuItem Header="Tools">
-                <ItemsControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.MenuRegionTools}"/>
+                <ItemsControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.MenuRegionTool}"/>
             </MenuItem>
         </Menu>
         <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
@@ -30,7 +33,15 @@
             </Grid.ColumnDefinitions>
             <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.DataRegion}" Grid.Column="0" />
             <GridSplitter HorizontalAlignment="Left" Background="Black" ShowsPreview="True" Width="5" Grid.Column="1"/>
-            <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.PlotRegion}" Grid.Column="2" />
+            
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.PlotRegion}" Grid.Row="0" />
+                <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.TimePickingRegion}" Grid.Row="1" />
+            </Grid>
         </Grid>
     </Grid>
 </Window>

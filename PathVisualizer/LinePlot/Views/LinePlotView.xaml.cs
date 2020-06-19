@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,11 +14,11 @@ using System.Windows.Shapes;
 namespace LinePlot.Views
 {
     /// <summary>
-    /// Interaction logic for ViewA.xaml
+    /// Interaction logic for LinePlotView.xaml
     /// </summary>
-    public partial class ViewA : UserControl
+    public partial class LinePlotView : UserControl
     {
-        public ViewA()
+        public LinePlotView()
         {
             InitializeComponent();
         }

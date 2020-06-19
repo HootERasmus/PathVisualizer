@@ -9,18 +9,18 @@ namespace LinePlot
     {
         public LinePlotModule(IRegionManager regionManager)
         {
-            regionManager.RegisterViewWithRegion(Lib.RegionNames.PlotRegion, typeof(ViewA));
+            regionManager.RegisterViewWithRegion(Lib.RegionNames.PlotRegion, typeof(LinePlotView));
             
         }
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<ViewA>();
+            containerProvider.Resolve<LinePlotView>();
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<ViewA>();
+            containerRegistry.Register<LinePlotView>();
         }
     }
 }
