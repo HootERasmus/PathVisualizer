@@ -7,5 +7,6 @@
         public const string MenuRegionFile = "MenuRegionFile";
         public const string MenuRegionTool = "MenuRegionTool";
         public const string MenuRegionView = "MenuRegionView";
+        public const string TimePickingRegion = "TimePickingRegion";
     }
 }

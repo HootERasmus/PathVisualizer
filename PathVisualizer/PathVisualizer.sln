@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filters", "Filters\Filters.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlotSettings", "PlotSettings\PlotSettings.csproj", "{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimePicker", "TimePicker\TimePicker.csproj", "{88668394-AD95-410A-BE96-2EF6250FFDF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88668394-AD95-410A-BE96-2EF6250FFDF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88668394-AD95-410A-BE96-2EF6250FFDF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88668394-AD95-410A-BE96-2EF6250FFDF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88668394-AD95-410A-BE96-2EF6250FFDF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

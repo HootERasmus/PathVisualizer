@@ -33,7 +33,15 @@
             </Grid.ColumnDefinitions>
             <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.DataRegion}" Grid.Column="0" />
             <GridSplitter HorizontalAlignment="Left" Background="Black" ShowsPreview="True" Width="5" Grid.Column="1"/>
-            <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.PlotRegion}" Grid.Column="2" />
+            
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.PlotRegion}" Grid.Row="0" />
+                <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.TimePickingRegion}" Grid.Row="1" />
+            </Grid>
         </Grid>
     </Grid>
 </Window>
