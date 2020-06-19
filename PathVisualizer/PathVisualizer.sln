@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimePicker", "TimePicker\Ti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipeline", "Pipeline\Pipeline.csproj", "{54A92923-E53C-48B5-B4C6-37CC623A1EC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Export3DLine", "Export3DLine\Export3DLine.csproj", "{42D3D13A-C8A8-4D64-8632-3D928CC5A77F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{54A92923-E53C-48B5-B4C6-37CC623A1EC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54A92923-E53C-48B5-B4C6-37CC623A1EC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54A92923-E53C-48B5-B4C6-37CC623A1EC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42D3D13A-C8A8-4D64-8632-3D928CC5A77F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42D3D13A-C8A8-4D64-8632-3D928CC5A77F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42D3D13A-C8A8-4D64-8632-3D928CC5A77F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42D3D13A-C8A8-4D64-8632-3D928CC5A77F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
