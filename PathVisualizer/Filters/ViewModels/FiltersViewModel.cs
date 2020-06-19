@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Filters.Events;
@@ -42,6 +44,7 @@ namespace Filters.ViewModels
         private readonly IEventAggregator _eventAggregator;
         private readonly IPipeline _pipeline;
         private AddFilterWindow _addFilterWindow;
+        private readonly AddFilterViewModel _addFilterViewModel;
         private Tag _lastTag;
 
         public FiltersViewModel(IEventAggregator eventAggregator, IPipeline pipeline)
@@ -54,6 +57,8 @@ namespace Filters.ViewModels
 
             FiltersInUse = new ObservableCollection<IFilter>();
 
+            _addFilterViewModel = new AddFilterViewModel(eventAggregator);
+
             _lastTag = new Tag("", new List<TimeCoordinate>());
 
             _eventAggregator = eventAggregator;
@@ -62,6 +67,7 @@ namespace Filters.ViewModels
 
             _pipeline = pipeline;
             _pipeline.AddActionToPipe(ApplyFilters,2);
+            LoadFilters();
 
         }
 
@@ -69,7 +75,7 @@ namespace Filters.ViewModels
         {
             _addFilterWindow = new AddFilterWindow
             {
-                DataContext = new AddFilterViewModel(_eventAggregator),
+                DataContext = _addFilterViewModel,
                 WindowStartupLocation = WindowStartupLocation.Manual
             };
 
@@ -132,10 +138,40 @@ namespace Filters.ViewModels
             T tmp = list[indexA];
             list[indexA] = list[indexB];
             list[indexB] = tmp;
-        }   
+        }
+
+        private void SaveFilters()
+        {
+            var sb = new StringBuilder();
+
+            foreach (var filter in FiltersInUse)
+            {
+                sb.Append($"{filter.Name};");
+            }
+
+            sb.Remove(sb.Length -1, 1);
+
+            UserSettings.Default.Filters = sb.ToString();
+            UserSettings.Default.Save();
+        }
+
+        private void LoadFilters()
+        {
+            var filtersString = UserSettings.Default.Filters;
+
+            var split = filtersString.Split(';');
+
+            foreach (var item in split)
+            {
+                var filter = _addFilterViewModel.Filters.FirstOrDefault(x => x.Name == item);
+                if (filter != null)
+                    FiltersInUse.Add(filter);
+            }
+        }
 
         private void ClosingAction()
         {
+            SaveFilters();
             _eventAggregator.GetEvent<PipeLineStartEvent>().Publish(new PipelineStartEventModel(this, _lastTag));
         }
     }

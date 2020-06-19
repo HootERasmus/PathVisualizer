@@ -2,10 +2,6 @@
 using System.Windows;
 using Filters.Events;
 using Filters.Models;
-using Filters.Views;
-using Lib;
-using Lib.Events;
-using Lib.SharedModels;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;

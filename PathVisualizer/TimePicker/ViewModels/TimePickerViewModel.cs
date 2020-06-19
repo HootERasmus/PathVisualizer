@@ -1,9 +1,7 @@
 ﻿using Prism.Mvvm;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Lib.Events;
 using Lib.SharedModels;
 using Pipeline;
