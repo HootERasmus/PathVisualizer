@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filters", "Filters\Filters.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlotSettings", "PlotSettings\PlotSettings.csproj", "{20F45C2C-D897-4E57-AE1D-3B32BE706E5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimePicker", "TimePicker\TimePicker.csproj", "{88668394-AD95-410A-BE96-2EF6250FFDF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimePicker", "TimePicker\TimePicker.csproj", "{88668394-AD95-410A-BE96-2EF6250FFDF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pipeline", "Pipeline\Pipeline.csproj", "{54A92923-E53C-48B5-B4C6-37CC623A1EC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipeline", "Pipeline\Pipeline.csproj", "{54A92923-E53C-48B5-B4C6-37CC623A1EC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
