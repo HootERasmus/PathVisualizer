@@ -1,6 +1,7 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Filters.Views;
+using Pipeline;
 using Prism.Events;
 
 namespace Filters.ViewModels
@@ -12,12 +13,12 @@ namespace Filters.ViewModels
         private readonly IEventAggregator _eventAggregator;
         private readonly FiltersViewModel _filtersViewModel;
 
-        public MenuToolFilterViewModel(IEventAggregator eventAggregator)
+        public MenuToolFilterViewModel(IEventAggregator eventAggregator, IPipeline pipeline)
         {
             OpenFilterWindowCommand = new DelegateCommand(OpenFilterWindowAction);
             
             _eventAggregator = eventAggregator;
-            _filtersViewModel = new FiltersViewModel(_eventAggregator);
+            _filtersViewModel = new FiltersViewModel(_eventAggregator, pipeline);
         }
 
         private void OpenFilterWindowAction()

@@ -6,6 +6,7 @@ using Lib.SharedModels;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using Pipeline;
 using Prism.Events;
 using Color = System.Drawing.Color;
 
@@ -37,8 +38,8 @@ namespace LinePlot.ViewModels
         public LinePlotViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _eventAggregator.GetEvent<TagFilterEvent>().Subscribe(PlotLine);
             _eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
+            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(PlotLine);
         }
 
         private async void PlotLine(Tag tag)

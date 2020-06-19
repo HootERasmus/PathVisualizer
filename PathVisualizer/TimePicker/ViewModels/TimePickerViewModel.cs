@@ -1,12 +1,13 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Lib.Events;
 using Lib.SharedModels;
+using Pipeline;
+using Prism.Commands;
 using Prism.Events;
 
 namespace TimePicker.ViewModels
@@ -93,17 +94,44 @@ namespace TimePicker.ViewModels
         }
 
         private readonly IEventAggregator _eventAggregator;
+        private readonly IPipeline _pipeline;
+        private Tag _lastTag;
 
-        public TimePickerViewModel(IEventAggregator eventAggregator)
+
+        public DelegateCommand MouseButtonUpCommand { get; set; }
+
+        public TimePickerViewModel(IEventAggregator eventAggregator, IPipeline pipeline)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<TagSelectionEvent>().Subscribe(CalculateTime);
+
+            MouseButtonUpCommand = new DelegateCommand(MouseButtonUpAction);
+
+            _pipeline = pipeline;
+            _pipeline.AddActionToPipe(CutTimeFromTag, 1);
+        }
+
+        private Task<Tag> CutTimeFromTag(Tag tag)
+        {
+            return Task.Run(() => {
+                var timeCoordinates = tag.TimeCoordinates.Where(x => x.Timestamp >= LowerTimeValue && x.Timestamp <= UpperTimeValue).ToList();
+                return new Tag(tag.Id, timeCoordinates);
+            });
+        }
+
+        public void MouseButtonUpAction()
+        {
+            _eventAggregator.GetEvent<PipeLineStartEvent>().Publish(new PipelineStartEventModel(this, _lastTag));
         }
 
         private void CalculateTime(Tag tag)
         {
-            MaximumTime = tag.TimeCoordinates.Max(x => x.Timestamp);
-            MinimumTime = tag.TimeCoordinates.Min(x => x.Timestamp);
+            if(tag == null) return;
+            
+            _lastTag = tag;
+            
+            MaximumTime = _lastTag.TimeCoordinates.Max(x => x.Timestamp);
+            MinimumTime = _lastTag.TimeCoordinates.Min(x => x.Timestamp);
 
             UpperTimeValue = MaximumTime;
             LowerTimeValue = MinimumTime;

@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows;
 using Filters.Events;
 using Filters.Models;
 using Filters.Views;
 using Lib.Events;
 using Lib.SharedModels;
+using Pipeline;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -38,10 +40,11 @@ namespace Filters.ViewModels
         }
 
         private readonly IEventAggregator _eventAggregator;
+        private readonly IPipeline _pipeline;
         private AddFilterWindow _addFilterWindow;
         private Tag _lastTag;
 
-        public FiltersViewModel(IEventAggregator eventAggregator)
+        public FiltersViewModel(IEventAggregator eventAggregator, IPipeline pipeline)
         {
             AddFilterCommand = new DelegateCommand(AddFilterAction);
             RemoveFilterCommand = new DelegateCommand(RemoveFilterAction);
@@ -56,7 +59,9 @@ namespace Filters.ViewModels
             _eventAggregator = eventAggregator;
 
             _eventAggregator.GetEvent<FilterSelectionEvent>().Subscribe(AddFilterToCollection, ThreadOption.UIThread, false);
-            _eventAggregator.GetEvent<TagSelectionEvent>().Subscribe(ApplyFilters, ThreadOption.UIThread);
+
+            _pipeline = pipeline;
+            _pipeline.AddActionToPipe(ApplyFilters,2);
 
         }
 
@@ -103,20 +108,23 @@ namespace Filters.ViewModels
             FiltersInUse.Add(filter);
         }
 
-        private async void ApplyFilters(Tag tag)
+        private Task<Tag> ApplyFilters(Tag tag)
         {
-            if(tag == null) return;
+            if(tag == null) return null;
             
             _lastTag = tag;
 
-            var tempData = tag.TimeCoordinates;
-
-            foreach (var filter in FiltersInUse)
+            return Task.Run(async () =>
             {
-                tempData = await filter.Filter(tempData);
-            }
+                var tempData = tag.TimeCoordinates;
 
-            _eventAggregator.GetEvent<TagFilterEvent>().Publish(new Tag(tag.Id, tempData));
+                foreach (var filter in FiltersInUse)
+                {
+                    tempData = await filter.Filter(tempData);
+                }
+
+                return new Tag(tag.Id, tempData);
+            });
         }
 
         public static void Swap<T>(IList<T> list, int indexA, int indexB)
@@ -128,7 +136,7 @@ namespace Filters.ViewModels
 
         private void ClosingAction()
         {
-            ApplyFilters(_lastTag);
+            _eventAggregator.GetEvent<PipeLineStartEvent>().Publish(new PipelineStartEventModel(this, _lastTag));
         }
     }
 }
