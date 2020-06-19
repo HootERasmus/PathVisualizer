@@ -51,7 +51,7 @@ namespace LinePlot.ViewModels
                 var color = Color.FromName(Settings.LineColor);
                 MyPlotModel.Series.Clear();
                 _dataPoints = ConvertIntoDataPoints(SelectedTag);
-                MyPlotModel.Series.Add(new LineSeries {Title = tag.Id, ItemsSource = _dataPoints, Color = OxyColor.FromRgb(color.R, color.G, color.B)});
+                MyPlotModel.Series.Add(new LineSeries {Title = $"{tag.Id} : [{tag.TimeCoordinates.Count:N0}]", ItemsSource = _dataPoints, Color = OxyColor.FromRgb(color.R, color.G, color.B)});
                 MyPlotModel.LegendBackground = OxyColor.FromRgb(255,255,255);
                 RaisePropertyChanged(nameof(MyPlotModel));
                 MyPlotModel.InvalidatePlot(true);
