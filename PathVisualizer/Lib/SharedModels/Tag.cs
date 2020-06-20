@@ -12,6 +12,5 @@ namespace Lib.SharedModels
 
         public string Id { get; }
         public List<TimeCoordinate> TimeCoordinates { get; }
-        public int Count => TimeCoordinates.Count;
     }
 }
