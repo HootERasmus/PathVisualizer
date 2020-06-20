@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HeatMapPlot.ViewModels
 {
-    public class ViewAViewModel : BindableBase
+    public class HeatMapPlotView : BindableBase
     {
         private string _message;
         public string Message
@@ -17,7 +17,7 @@ namespace HeatMapPlot.ViewModels
             set { SetProperty(ref _message, value); }
         }
 
-        public ViewAViewModel()
+        public HeatMapPlotView()
         {
             Message = "View A from your Prism Module";
         }

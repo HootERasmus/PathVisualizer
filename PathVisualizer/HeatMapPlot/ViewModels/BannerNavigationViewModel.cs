@@ -2,14 +2,14 @@
 using Lib;
 using Prism.Regions;
 
-namespace LinePlot.ViewModels
+namespace HeatMapPlot.ViewModels
 {
     public class BannerNavigationViewModel : Navigation
     {
         public BannerNavigationViewModel(IRegionManager regionManager) : base(regionManager)
         {
-            NavigationView = new Uri("/LinePlotView", UriKind.Relative);
-            ButtonContent = "Line plot";
+            ButtonContent = "Heat map";
+            NavigationView = new Uri("/HeatMapPlotView", UriKind.Relative);
         }
 
         public sealed override string ButtonContent { get; set; }
