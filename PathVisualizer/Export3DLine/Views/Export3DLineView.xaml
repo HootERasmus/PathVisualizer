@@ -9,6 +9,6 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True" >
     <Grid>
-        <MenuItem Header="Export 3D line"/>
+        <MenuItem Header="Export 3D line" Command="{Binding Export3DLineCommand}"/>
     </Grid>
 </UserControl>
