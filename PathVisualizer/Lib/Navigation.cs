@@ -8,11 +8,11 @@ namespace Lib
 {
     public abstract class Navigation : BindableBase
     {
-        private readonly IRegionManager _regionManager;
+        protected readonly IRegionManager RegionManager;
 
         protected Navigation(IRegionManager regionManager)
         {
-            _regionManager = regionManager;
+            RegionManager = regionManager;
             NavigateCommand = new DelegateCommand(NavigateAction);
         }
 

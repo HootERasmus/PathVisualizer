@@ -4,17 +4,14 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:lib="clr-namespace:Lib;assembly=Lib"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="350" Width="800" >
+        Title="{Binding Title}" Height="Auto" Width="800" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Menu Grid.ColumnSpan="2" Background="Brown">
+        <Menu Grid.Row="0" Background="Brown">
             <MenuItem Header="File">
                 <ItemsControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.MenuRegionFile}"/>
             </MenuItem>
@@ -25,7 +22,10 @@
                 <ItemsControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.MenuRegionTool}"/>
             </MenuItem>
         </Menu>
-        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <ItemsControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.BannerLineRegion}"/>
+        </StackPanel>
+        <Grid Grid.Column="0" Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>

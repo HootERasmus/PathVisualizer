@@ -8,5 +8,6 @@
         public const string MenuRegionTool = "MenuRegionTool";
         public const string MenuRegionView = "MenuRegionView";
         public const string TimePickingRegion = "TimePickingRegion";
+        public const string BannerLineRegion = "BannerLineRegion";
     }
 }
