@@ -6,6 +6,7 @@ namespace Pipeline
 {
     public interface IPipeline
     {
-        public void AddActionToPipe(Func<Tag, Task<Tag>> action, int stage);
+        public bool AddActionToPipe(string key, Func<Tag, Task<Tag>> action, int stage);
+        public bool RemoveActionFromPipe(string key, int stage);
     }
 }

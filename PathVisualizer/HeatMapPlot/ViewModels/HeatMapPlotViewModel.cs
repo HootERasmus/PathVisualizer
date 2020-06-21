@@ -43,7 +43,7 @@ namespace HeatMapPlot.ViewModels
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
-            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(PlotHeatMap);
+            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(tags => PlotHeatMap(tags.Last()));
         }
 
         private async void PlotHeatMap(Tag tag)

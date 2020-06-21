@@ -9,5 +9,6 @@
         public const string MenuRegionView = "MenuRegionView";
         public const string TimePickingRegion = "TimePickingRegion";
         public const string BannerLineRegion = "BannerLineRegion";
+        public const string ProgressRegion = "ProgressRegion";
     }
 }

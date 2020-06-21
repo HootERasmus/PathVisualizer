@@ -1,6 +1,7 @@
 ﻿using Prism.Mvvm;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,9 +28,9 @@ namespace Export3DLine.ViewModels
             Export3DLineCommand = new DelegateCommand(Export3DLineAction);
         }
 
-        private void SaveTag(Tag tag)
+        private void SaveTag(IList<Tag> tags)
         {
-            _tag = tag;
+            _tag = tags.Last();
         }
 
         private async void Export3DLineAction()

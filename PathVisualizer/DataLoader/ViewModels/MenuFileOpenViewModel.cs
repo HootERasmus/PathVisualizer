@@ -41,10 +41,12 @@ namespace DataLoader.ViewModels
 
         private async Task LoadFiles(string[] fileNames)
         {
-
             await Task.Run(() =>
             {
                 if (fileNames.Any(fileName => !File.Exists(fileName))) return;
+
+                _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, fileNames.Length, 0));
+                var count = 0;
 
                 Tags.Clear();
                 try
@@ -72,6 +74,8 @@ namespace DataLoader.ViewModels
                             }
                             Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new TimeCoordinate(x, y, z, batteryPower, timestamp, unit, dqi));
                         }
+
+                        _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, fileNames.Length, ++count));
                     }
 
                 }

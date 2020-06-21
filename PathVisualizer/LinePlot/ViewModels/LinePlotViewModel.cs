@@ -1,5 +1,6 @@
 ﻿using Prism.Mvvm;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Lib.Events;
 using Lib.SharedModels;
@@ -39,7 +40,7 @@ namespace LinePlot.ViewModels
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
-            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(PlotLine);
+            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(tags => PlotLine(tags.Last()));
         }
 
         private async void PlotLine(Tag tag)

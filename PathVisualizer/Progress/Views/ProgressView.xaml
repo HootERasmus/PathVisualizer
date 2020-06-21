@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="Progress.Views.ProgressView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Progress.Views"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True" >
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <ProgressBar Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" Value="{Binding ProgressValue}" Height="20" Visibility="{Binding Visibility, Converter={StaticResource BooleanToVisibilityConverter }}"/>
+        <TextBlock Text="{Binding ProgressValueString,FallbackValue=No content}" Height="20" HorizontalAlignment="Center" Visibility="{Binding Visibility, Converter={StaticResource BooleanToVisibilityConverter }}"/>
+    </Grid>
+</UserControl>

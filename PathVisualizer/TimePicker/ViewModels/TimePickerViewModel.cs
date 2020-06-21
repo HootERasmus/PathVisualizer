@@ -106,7 +106,7 @@ namespace TimePicker.ViewModels
             MouseButtonUpCommand = new DelegateCommand(MouseButtonUpAction);
 
             _pipeline = pipeline;
-            _pipeline.AddActionToPipe(CutTimeFromTag, 1);
+            _pipeline.AddActionToPipe(nameof(CutTimeFromTag),CutTimeFromTag, 1);
         }
 
         private Task<Tag> CutTimeFromTag(Tag tag)

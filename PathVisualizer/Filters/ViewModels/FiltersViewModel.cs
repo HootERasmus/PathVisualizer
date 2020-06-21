@@ -7,7 +7,6 @@ using System.Windows;
 using Filters.Events;
 using Filters.Models;
 using Filters.Views;
-using Lib.Events;
 using Lib.SharedModels;
 using Pipeline;
 using Prism.Commands;
@@ -66,7 +65,6 @@ namespace Filters.ViewModels
             _eventAggregator.GetEvent<FilterSelectionEvent>().Subscribe(AddFilterToCollection, ThreadOption.UIThread, false);
 
             _pipeline = pipeline;
-            _pipeline.AddActionToPipe(ApplyFilters,2);
             LoadFilters();
 
         }
@@ -114,25 +112,6 @@ namespace Filters.ViewModels
             FiltersInUse.Add(filter);
         }
 
-        private Task<Tag> ApplyFilters(Tag tag)
-        {
-            if(tag == null) return null;
-            
-            _lastTag = tag;
-
-            return Task.Run(async () =>
-            {
-                var tempData = tag.TimeCoordinates;
-
-                foreach (var filter in FiltersInUse)
-                {
-                    tempData = await filter.Filter(tempData);
-                }
-
-                return new Tag(tag.Id, tempData);
-            });
-        }
-
         public static void Swap<T>(IList<T> list, int indexA, int indexB)
         {
             T tmp = list[indexA];
@@ -167,11 +146,45 @@ namespace Filters.ViewModels
                 if (filter != null)
                     FiltersInUse.Add(filter);
             }
+
+            AddFiltersToPipeline();
         }
+
+        private void AddFiltersToPipeline()
+        {
+            foreach (var filter in FiltersInUse)
+            {
+                _pipeline.AddActionToPipe(filter.Name, tag =>
+                {
+                    return Task.Run(async () =>
+                    {
+                        if (tag == null) return null;
+
+                        _lastTag = tag;
+
+                        var newData = await filter.Filter(tag.TimeCoordinates);
+                        return new Tag(tag.Id, newData);
+                    });
+                }, 2);
+            }
+        }
+
+        private void RemoveFiltersFromPipeline()
+        {
+            foreach (var filter in FiltersInUse)
+            {
+                _pipeline.RemoveActionFromPipe(filter.Name, 2);
+            }
+        }
+
 
         private void ClosingAction()
         {
             SaveFilters();
+
+            RemoveFiltersFromPipeline();
+            AddFiltersToPipeline();
+
             _eventAggregator.GetEvent<PipeLineStartEvent>().Publish(new PipelineStartEventModel(this, _lastTag));
         }
     }
