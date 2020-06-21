@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Media;
 using Lib.Events;
 using Lib.SharedModels;
 using LinePlot.Events;
@@ -13,7 +12,6 @@ using MetadataExtractor;
 using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
-using OxyPlot.Reporting;
 using OxyPlot.Wpf;
 using PipelineService;
 using Prism.Events;
@@ -45,15 +43,11 @@ namespace LinePlot.ViewModels
         
         private List<DataPoint> _dataPoints;
 
-        private readonly IEventAggregator _eventAggregator;
-
         public LinePlotViewModel(IEventAggregator eventAggregator)
         {
-            _eventAggregator = eventAggregator;
-            _eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
-            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
-            _eventAggregator.GetEvent<ExportPlotEvent>().Subscribe(ExportImage);
-
+            eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
+            eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
+            eventAggregator.GetEvent<ExportPlotEvent>().Subscribe(ExportImage, ThreadOption.UIThread, false, x => x.Sender.GetType() == typeof(MenuFileExportViewModel));
         }
 
         private async void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
@@ -67,25 +61,6 @@ namespace LinePlot.ViewModels
 
             await Task.Run(() =>
             {
-                // Set image as background
-                using var fs = new FileStream(BackgroundImage, FileMode.Open);
-                var image0 = new OxyImage(fs);
-
-                var imageAnnotation = new ImageAnnotation
-                {
-                    ImageSource = image0,
-                    Opacity = 1,
-                    X = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
-                    Y = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
-                    Width = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
-                    Height = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
-                    Layer = AnnotationLayer.BelowSeries,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Middle,
-                    Interpolate = true
-                };
-                MyPlotModel.Annotations.Add(imageAnnotation);
-
                 var color = Color.FromName(Settings.LineColor);
                 MyPlotModel.Series.Clear();
                 _dataPoints = ConvertIntoDataPoints(SelectedTag);
@@ -119,13 +94,35 @@ namespace LinePlot.ViewModels
             MyPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = model.XAxisTitle, Minimum = model.XAxisMinimum, Maximum = model.XAxisMaximum });
             MyPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = model.YAxisTitle, Minimum = model.YAxisMinimum, Maximum = model.YAxisMaximum });
 
+            // Set image as background
+            await using var fs = new FileStream(BackgroundImage, FileMode.Open);
+            var image0 = new OxyImage(fs);
+
+            var imageAnnotation = new ImageAnnotation
+            {
+                ImageSource = image0,
+                Opacity = 1,
+                X = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
+                Y = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
+                Width = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
+                Height = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
+                Layer = AnnotationLayer.BelowSeries,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Middle,
+                Interpolate = true
+            };
+            MyPlotModel.Annotations.Add(imageAnnotation);
+
+            RaisePropertyChanged(nameof(MyPlotModel));
+            MyPlotModel.InvalidatePlot(true);
+
             if (SelectedTag != null)
             {
                 await PlotLine(SelectedTag);
             }
         }
 
-        private void ExportImage(string path)
+        private void ExportImage(ExportPlotEventModel model)
         {
             var directories = ImageMetadataReader.ReadMetadata(BackgroundImage);
 
@@ -145,7 +142,7 @@ namespace LinePlot.ViewModels
             }
 
             var exporter = new PngExporter{Height = height, Width = width};
-            exporter.ExportToFile(MyPlotModel, path);
+            exporter.ExportToFile(MyPlotModel, model.Path);
         }
     }
 }

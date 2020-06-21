@@ -39,7 +39,7 @@ namespace LinePlot.ViewModels
 
             if (string.IsNullOrEmpty(dialog.FileName)) return;
 
-            _eventAggregator.GetEvent<ExportPlotEvent>().Publish(dialog.FileName);
+            _eventAggregator.GetEvent<ExportPlotEvent>().Publish(new ExportPlotEventModel(this, dialog.FileName));
         }
     }
 }

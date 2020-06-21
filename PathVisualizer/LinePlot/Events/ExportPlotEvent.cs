@@ -2,7 +2,7 @@
 
 namespace LinePlot.Events
 {
-    public class ExportPlotEvent : PubSubEvent<string>
+    public class ExportPlotEvent : PubSubEvent<ExportPlotEventModel>
     {
     }
 }

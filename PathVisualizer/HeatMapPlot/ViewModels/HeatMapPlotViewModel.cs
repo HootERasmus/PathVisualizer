@@ -1,7 +1,6 @@
 ﻿using System;
 using Prism.Mvvm;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,15 +35,14 @@ namespace HeatMapPlot.ViewModels
 
         private double[,] _dataPoints;
 
-        private readonly IEventAggregator _eventAggregator;
         private int _xOffSet;
         private int _yOffSet;
 
         public HeatMapPlotViewModel(IEventAggregator eventAggregator)
         {
-            _eventAggregator = eventAggregator;
-            _eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
-            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
+            var eventAggregator1 = eventAggregator;
+            eventAggregator1.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
+            eventAggregator1.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
         }
 
         private async void OnPipelineCompletedEvent(IDictionary<string,Tag> history)
@@ -101,7 +99,7 @@ namespace HeatMapPlot.ViewModels
             return points;
         }
 
-        private void ApplyPlotSettings(PlotSettingsEventModel model)
+        private async void ApplyPlotSettings(PlotSettingsEventModel model)
         {
             Settings = model;
 
@@ -121,7 +119,7 @@ namespace HeatMapPlot.ViewModels
 
             if (SelectedTag != null)
             {
-                PlotHeatMap(SelectedTag);
+                await PlotHeatMap(SelectedTag);
             }
         }
     }
