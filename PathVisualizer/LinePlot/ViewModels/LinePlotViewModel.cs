@@ -40,10 +40,23 @@ namespace LinePlot.ViewModels
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
-            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(tags => PlotLine(tags.Last()));
+            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
         }
 
-        private async void PlotLine(Tag tag)
+
+        private async void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
+        {
+            //PipelineHistory.Clear();
+
+            //foreach (var tag in history)
+            //{
+            //    PipelineHistory.Add($"{tag.Key} - {tag.Value.TimeCoordinates.Count}");
+            //}
+
+            await PlotLine(history.Values.Last());
+        }
+
+        private async Task PlotLine(Tag tag)
         {
             SelectedTag = tag;
 

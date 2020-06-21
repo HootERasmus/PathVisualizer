@@ -27,7 +27,6 @@ namespace Pipeline
             eventAggregator.GetEvent<PipeLineStartEvent>().Subscribe(StartPipeLine);
         }
 
-
         public bool AddActionToPipe(string key, Func<Tag, Task<Tag>> action, int stage)
         {
             try
@@ -60,17 +59,17 @@ namespace Pipeline
         {
             if(model.Tag == null) return;
 
-            var history = new List<Tag>();
+            var history = new Dictionary<string, Tag>();
             
             var tempTag = model.Tag;
-            history.Add(tempTag);
+            history.Add("Original", tempTag);
 
             foreach (var stage in _stages)
             {
                 foreach (var action in stage)
                 {
                     tempTag = await action.Value(tempTag);
-                    history.Add(tempTag);
+                    history.Add(action.Key, tempTag);
                 }
             }
 

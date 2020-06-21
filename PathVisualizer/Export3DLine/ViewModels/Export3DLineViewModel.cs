@@ -23,14 +23,15 @@ namespace Export3DLine.ViewModels
         public Export3DLineViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(SaveTag);
+            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
 
             Export3DLineCommand = new DelegateCommand(Export3DLineAction);
         }
 
-        private void SaveTag(IList<Tag> tags)
+
+        private void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
         {
-            _tag = tags.Last();
+            _tag = history.Values.Last();
         }
 
         private async void Export3DLineAction()

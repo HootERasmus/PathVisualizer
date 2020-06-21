@@ -24,6 +24,7 @@ namespace Filters.ViewModels
         public DelegateCommand ClosingCommand { get; set; }
         
         public ObservableCollection<IFilter> FiltersInUse { get; set; }
+        private List<IFilter> _removedFilters;
 
         private IFilter _selectedFilter;
         public IFilter SelectedFilter
@@ -65,6 +66,7 @@ namespace Filters.ViewModels
             _eventAggregator.GetEvent<FilterSelectionEvent>().Subscribe(AddFilterToCollection, ThreadOption.UIThread, false);
 
             _pipeline = pipeline;
+            _removedFilters = new List<IFilter>();
             LoadFilters();
 
         }
@@ -82,6 +84,7 @@ namespace Filters.ViewModels
 
         private void RemoveFilterAction()
         {
+            _removedFilters.Add(SelectedFilter);
             FiltersInUse.Remove(SelectedFilter);
         }
 
@@ -128,7 +131,8 @@ namespace Filters.ViewModels
                 sb.Append($"{filter.Name};");
             }
 
-            sb.Remove(sb.Length -1, 1);
+            if(sb.Length != 0)
+                sb.Remove(sb.Length -1, 1);
 
             UserSettings.Default.Filters = sb.ToString();
             UserSettings.Default.Save();
@@ -171,10 +175,12 @@ namespace Filters.ViewModels
 
         private void RemoveFiltersFromPipeline()
         {
-            foreach (var filter in FiltersInUse)
+            foreach (var filter in _removedFilters)
             {
                 _pipeline.RemoveActionFromPipe(filter.Name, 2);
             }
+
+            _removedFilters.Clear();
         }
 
 

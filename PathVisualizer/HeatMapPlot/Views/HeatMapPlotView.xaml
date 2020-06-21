@@ -8,19 +8,20 @@
              d:DesignHeight="300" d:DesignWidth="300"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:oxy="http://oxyplot.org/wpf"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="9"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="53"/>
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <DataTemplate x:Key="DataTemplate" DataType="system:String">
+            <TextBlock Text="{Binding  FallbackValue=No content}"/>
+        </DataTemplate>
+    </UserControl.Resources>
+        <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="56"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="8"/>
+            <ColumnDefinition Width="22*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <!--<Image Source="{Binding BackgroundImage}" Stretch="Fill" Grid.Row="1" Grid.Column="1"/>-->
-        <oxy:PlotView Model="{Binding MyPlotModel}" Background="Transparent" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
+
+        <oxy:PlotView Model="{Binding MyPlotModel}" Background="Transparent" Grid.Column="0" Grid.Row="0" />
+        <ListView Grid.Column="1" ItemsSource="{Binding PipelineHistory}" ItemTemplate="{StaticResource DataTemplate}"/>
     </Grid>
 </UserControl>
