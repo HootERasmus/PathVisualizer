@@ -1,7 +1,7 @@
 ﻿using Prism.Ioc;
 using Shell.Views;
 using System.Windows;
-using Pipeline;
+using PipelineService;
 using Prism.Modularity;
 
 namespace Shell
@@ -18,7 +18,7 @@ namespace Shell
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterSingleton<IPipeline, Pipeline.Pipeline>();
+            containerRegistry.RegisterSingleton<IPipeline, Pipeline>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

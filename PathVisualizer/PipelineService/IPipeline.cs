@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Lib.SharedModels;
 
-namespace Pipeline
+namespace PipelineService
 {
     public interface IPipeline
     {

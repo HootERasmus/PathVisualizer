@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="Pipeline.Views.PipelineView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Pipeline.Views"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="100"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             prism:ViewModelLocator.AutoWireViewModel="True" >
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="DataTemplate" DataType="system:String">
+            <TextBlock Text="{Binding  FallbackValue=No content}"/>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <ListView ItemsSource="{Binding PipelineHistory}" ItemTemplate="{StaticResource DataTemplate}"/>
+    </Grid>
+</UserControl>

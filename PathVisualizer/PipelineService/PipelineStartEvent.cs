@@ -1,9 +1,9 @@
 ﻿using Lib.SharedModels;
 using Prism.Events;
 
-namespace Pipeline
+namespace PipelineService
 {
-    public class PipeLineStartEvent : PubSubEvent<PipelineStartEventModel>
+    public class PipelineStartEvent : PubSubEvent<PipelineStartEventModel>
     {
     }
 

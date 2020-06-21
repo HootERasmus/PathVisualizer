@@ -2,7 +2,7 @@
 using Lib.SharedModels;
 using Prism.Events;
 
-namespace Pipeline
+namespace PipelineService
 {
     public class PipelineCompletedEvent : PubSubEvent<IDictionary<string, Tag>>
     {

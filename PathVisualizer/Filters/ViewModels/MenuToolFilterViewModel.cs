@@ -1,7 +1,7 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Filters.Views;
-using Pipeline;
+using PipelineService;
 using Prism.Events;
 
 namespace Filters.ViewModels

@@ -10,7 +10,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lib\Lib.csproj" />
-    <ProjectReference Include="..\Pipeline\Pipeline.csproj" />
+    <ProjectReference Include="..\PipelineService\PipelineService.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="UserSettings.Designer.cs">

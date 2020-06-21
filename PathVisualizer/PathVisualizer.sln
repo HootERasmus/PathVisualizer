@@ -19,13 +19,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlotSettings", "PlotSetting
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimePicker", "TimePicker\TimePicker.csproj", "{88668394-AD95-410A-BE96-2EF6250FFDF0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipeline", "Pipeline\Pipeline.csproj", "{54A92923-E53C-48B5-B4C6-37CC623A1EC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Export3DLine", "Export3DLine\Export3DLine.csproj", "{42D3D13A-C8A8-4D64-8632-3D928CC5A77F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Export3DLine", "Export3DLine\Export3DLine.csproj", "{42D3D13A-C8A8-4D64-8632-3D928CC5A77F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeatMapPlot", "HeatMapPlot\HeatMapPlot.csproj", "{BADBBCD2-B8CC-4BAE-8045-5121722039C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeatMapPlot", "HeatMapPlot\HeatMapPlot.csproj", "{BADBBCD2-B8CC-4BAE-8045-5121722039C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Progress", "Progress\Progress.csproj", "{24636834-F3A5-4952-86D2-9C6BB096E1DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Progress", "Progress\Progress.csproj", "{24636834-F3A5-4952-86D2-9C6BB096E1DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pipeline", "Pipeline\Pipeline.csproj", "{7D8401D2-3719-41AB-9873-7D6D7272DBE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineService", "PipelineService\PipelineService.csproj", "{02EB7960-877F-4C4C-81E9-96B07B0360AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,10 +67,6 @@ Global
 		{88668394-AD95-410A-BE96-2EF6250FFDF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88668394-AD95-410A-BE96-2EF6250FFDF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88668394-AD95-410A-BE96-2EF6250FFDF0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54A92923-E53C-48B5-B4C6-37CC623A1EC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54A92923-E53C-48B5-B4C6-37CC623A1EC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54A92923-E53C-48B5-B4C6-37CC623A1EC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54A92923-E53C-48B5-B4C6-37CC623A1EC4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{42D3D13A-C8A8-4D64-8632-3D928CC5A77F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{42D3D13A-C8A8-4D64-8632-3D928CC5A77F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42D3D13A-C8A8-4D64-8632-3D928CC5A77F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -81,6 +79,14 @@ Global
 		{24636834-F3A5-4952-86D2-9C6BB096E1DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24636834-F3A5-4952-86D2-9C6BB096E1DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24636834-F3A5-4952-86D2-9C6BB096E1DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D8401D2-3719-41AB-9873-7D6D7272DBE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D8401D2-3719-41AB-9873-7D6D7272DBE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D8401D2-3719-41AB-9873-7D6D7272DBE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D8401D2-3719-41AB-9873-7D6D7272DBE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02EB7960-877F-4C4C-81E9-96B07B0360AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02EB7960-877F-4C4C-81E9-96B07B0360AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02EB7960-877F-4C4C-81E9-96B07B0360AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02EB7960-877F-4C4C-81E9-96B07B0360AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Lib.SharedModels;
 using Microsoft.Win32;
-using Pipeline;
+using PipelineService;
 using Prism.Commands;
 using Prism.Events;
 

@@ -7,8 +7,9 @@ using System.Windows;
 using Filters.Events;
 using Filters.Models;
 using Filters.Views;
+using Lib.Events;
 using Lib.SharedModels;
-using Pipeline;
+using PipelineService;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -24,7 +25,7 @@ namespace Filters.ViewModels
         public DelegateCommand ClosingCommand { get; set; }
         
         public ObservableCollection<IFilter> FiltersInUse { get; set; }
-        private List<IFilter> _removedFilters;
+        private readonly List<IFilter> _removedFilters;
 
         private IFilter _selectedFilter;
         public IFilter SelectedFilter
@@ -63,7 +64,8 @@ namespace Filters.ViewModels
 
             _eventAggregator = eventAggregator;
 
-            _eventAggregator.GetEvent<FilterSelectionEvent>().Subscribe(AddFilterToCollection, ThreadOption.UIThread, false);
+            _eventAggregator.GetEvent<FilterSelectionEvent>().Subscribe(AddFilterToCollection);
+            _eventAggregator.GetEvent<TagSelectionEvent>().Subscribe(tag => _lastTag = tag);
 
             _pipeline = pipeline;
             _removedFilters = new List<IFilter>();
@@ -164,8 +166,6 @@ namespace Filters.ViewModels
                     {
                         if (tag == null) return null;
 
-                        _lastTag = tag;
-
                         var newData = await filter.Filter(tag.TimeCoordinates);
                         return new Tag(tag.Id, newData);
                     });
@@ -191,7 +191,7 @@ namespace Filters.ViewModels
             RemoveFiltersFromPipeline();
             AddFiltersToPipeline();
 
-            _eventAggregator.GetEvent<PipeLineStartEvent>().Publish(new PipelineStartEventModel(this, _lastTag));
+            _eventAggregator.GetEvent<PipelineStartEvent>().Publish(new PipelineStartEventModel(this, _lastTag));
         }
     }
 }

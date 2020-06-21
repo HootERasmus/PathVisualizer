@@ -7,7 +7,7 @@ using Lib.SharedModels;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using Pipeline;
+using PipelineService;
 using Prism.Events;
 using Color = System.Drawing.Color;
 
@@ -46,13 +46,6 @@ namespace LinePlot.ViewModels
 
         private async void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
         {
-            //PipelineHistory.Clear();
-
-            //foreach (var tag in history)
-            //{
-            //    PipelineHistory.Add($"{tag.Key} - {tag.Value.TimeCoordinates.Count}");
-            //}
-
             await PlotLine(history.Values.Last());
         }
 
@@ -65,7 +58,7 @@ namespace LinePlot.ViewModels
                 var color = Color.FromName(Settings.LineColor);
                 MyPlotModel.Series.Clear();
                 _dataPoints = ConvertIntoDataPoints(SelectedTag);
-                MyPlotModel.Series.Add(new LineSeries {Title = $"{tag.Id} : [{tag.TimeCoordinates.Count:N0}]", ItemsSource = _dataPoints, Color = OxyColor.FromRgb(color.R, color.G, color.B)});
+                MyPlotModel.Series.Add(new LineSeries {Title = tag.Id, ItemsSource = _dataPoints, Color = OxyColor.FromRgb(color.R, color.G, color.B)});
                 MyPlotModel.LegendBackground = OxyColor.FromRgb(255,255,255);
                 RaisePropertyChanged(nameof(MyPlotModel));
                 MyPlotModel.InvalidatePlot(true);

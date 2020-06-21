@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Lib.SharedModels;
 using Prism.Events;
 
-namespace Pipeline
+namespace PipelineService
 {
     public class Pipeline : IPipeline
     {
@@ -24,7 +24,7 @@ namespace Pipeline
             };
 
             _eventAggregator = eventAggregator;
-            eventAggregator.GetEvent<PipeLineStartEvent>().Subscribe(StartPipeLine);
+            eventAggregator.GetEvent<PipelineStartEvent>().Subscribe(StartPipeLine);
         }
 
         public bool AddActionToPipe(string key, Func<Tag, Task<Tag>> action, int stage)

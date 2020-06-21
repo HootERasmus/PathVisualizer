@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Lib.Events;
 using Lib.SharedModels;
-using Pipeline;
+using PipelineService;
 using Prism.Events;
 using Prism.Mvvm;
 
@@ -22,7 +22,7 @@ namespace DataPanel.ViewModels
                 _selectedTag = value;
                 RaisePropertyChanged();
                 _eventAggregator.GetEvent<TagSelectionEvent>().Publish(SelectedTag);
-                _eventAggregator.GetEvent<PipeLineStartEvent>().Publish(new PipelineStartEventModel(this, SelectedTag));
+                _eventAggregator.GetEvent<PipelineStartEvent>().Publish(new PipelineStartEventModel(this, SelectedTag));
             }
         }
 

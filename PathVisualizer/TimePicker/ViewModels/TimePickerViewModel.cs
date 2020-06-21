@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Lib.Events;
 using Lib.SharedModels;
-using Pipeline;
+using PipelineService;
 using Prism.Commands;
 using Prism.Events;
 
@@ -119,7 +119,7 @@ namespace TimePicker.ViewModels
 
         public void MouseButtonUpAction()
         {
-            _eventAggregator.GetEvent<PipeLineStartEvent>().Publish(new PipelineStartEventModel(this, _lastTag));
+            _eventAggregator.GetEvent<PipelineStartEvent>().Publish(new PipelineStartEventModel(this, _lastTag));
         }
 
         private void CalculateTime(Tag tag)
