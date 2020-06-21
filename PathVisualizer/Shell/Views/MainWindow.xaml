@@ -15,6 +15,9 @@
         <Menu Grid.Row="0" Background="Brown">
             <MenuItem Header="File">
                 <ItemsControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.MenuRegionFile}"/>
+                <MenuItem Header="Export">
+                    <ItemsControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.MenuRegionFileExport}"/>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="View">
                 <ItemsControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.MenuRegionView}"/>

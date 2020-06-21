@@ -63,7 +63,7 @@ namespace PlotSettings.ViewModels
         private void BrowseImageAction()
         {
             var openFileDialog = new OpenFileDialog { Multiselect = false };
-
+            openFileDialog.Filter = "Image files|*.png;*.PNG;*.bmp;*.BMP";
             if (openFileDialog.ShowDialog() != true) return;
 
             var fileNames = openFileDialog.FileNames;

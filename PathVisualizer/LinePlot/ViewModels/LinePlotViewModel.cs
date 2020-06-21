@@ -1,15 +1,26 @@
-﻿using Prism.Mvvm;
+﻿using System;
+using Prism.Mvvm;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using Lib.Events;
 using Lib.SharedModels;
+using LinePlot.Events;
+using MetadataExtractor;
 using OxyPlot;
+using OxyPlot.Annotations;
 using OxyPlot.Axes;
-using OxyPlot.Series;
+using OxyPlot.Reporting;
+using OxyPlot.Wpf;
 using PipelineService;
 using Prism.Events;
 using Color = System.Drawing.Color;
+using LinearAxis = OxyPlot.Axes.LinearAxis;
+using LineSeries = OxyPlot.Series.LineSeries;
+using Tag = Lib.SharedModels.Tag;
 
 namespace LinePlot.ViewModels
 {
@@ -41,8 +52,9 @@ namespace LinePlot.ViewModels
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
             _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
-        }
+            _eventAggregator.GetEvent<ExportPlotEvent>().Subscribe(ExportImage);
 
+        }
 
         private async void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
         {
@@ -55,9 +67,29 @@ namespace LinePlot.ViewModels
 
             await Task.Run(() =>
             {
+                // Set image as background
+                using var fs = new FileStream(BackgroundImage, FileMode.Open);
+                var image0 = new OxyImage(fs);
+
+                var imageAnnotation = new ImageAnnotation
+                {
+                    ImageSource = image0,
+                    Opacity = 1,
+                    X = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
+                    Y = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
+                    Width = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
+                    Height = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
+                    Layer = AnnotationLayer.BelowSeries,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Middle,
+                    Interpolate = true
+                };
+                MyPlotModel.Annotations.Add(imageAnnotation);
+
                 var color = Color.FromName(Settings.LineColor);
                 MyPlotModel.Series.Clear();
                 _dataPoints = ConvertIntoDataPoints(SelectedTag);
+                
                 MyPlotModel.Series.Add(new LineSeries {Title = tag.Id, ItemsSource = _dataPoints, Color = OxyColor.FromRgb(color.R, color.G, color.B)});
                 MyPlotModel.LegendBackground = OxyColor.FromRgb(255,255,255);
                 RaisePropertyChanged(nameof(MyPlotModel));
@@ -77,7 +109,7 @@ namespace LinePlot.ViewModels
             return points;
         }
 
-        private void ApplyPlotSettings(PlotSettingsEventModel model)
+        private async void ApplyPlotSettings(PlotSettingsEventModel model)
         {
             Settings = model;
 
@@ -89,8 +121,31 @@ namespace LinePlot.ViewModels
 
             if (SelectedTag != null)
             {
-                PlotLine(SelectedTag);
+                await PlotLine(SelectedTag);
             }
+        }
+
+        private void ExportImage(string path)
+        {
+            var directories = ImageMetadataReader.ReadMetadata(BackgroundImage);
+
+            int height;
+            int width;
+
+            try
+            {
+                width = int.Parse(directories[0].Tags[0].Description);
+                height = int.Parse(directories[0].Tags[1].Description);
+            }
+            catch (Exception e)
+            {
+               Debug.WriteLine(e);
+               height = 800;
+               width = 600;
+            }
+
+            var exporter = new PngExporter{Height = height, Width = width};
+            exporter.ExportToFile(MyPlotModel, path);
         }
     }
 }

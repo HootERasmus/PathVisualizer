@@ -9,7 +9,7 @@ namespace Export3DLine
     {
         public Export3DLineModule(IRegionManager regionManager)
         {
-            regionManager.RegisterViewWithRegion(Lib.RegionNames.MenuRegionFile, typeof(Export3DLineView));
+            regionManager.RegisterViewWithRegion(Lib.RegionNames.MenuRegionFileExport, typeof(Export3DLineView));
         }
 
         public void OnInitialized(IContainerProvider containerProvider)
