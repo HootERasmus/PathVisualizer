@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DataLoaderService;
 using Lib;
 using Lib.Events;
 using Lib.SharedModels;
@@ -21,12 +22,14 @@ namespace DataLoader.ViewModels
 
         public DelegateCommand OpenCommand { get; set; }
         private readonly IEventAggregator _eventAggregator;
+        private readonly IDataLoader _dataLoader;
 
-        public MenuFileOpenViewModel(IEventAggregator eventAggregator)
+        public MenuFileOpenViewModel(IEventAggregator eventAggregator, IDataLoader dataLoader)
         {
             Tags = new List<Tag>();
             OpenCommand = new DelegateCommand(OpenAction);
             _eventAggregator = eventAggregator;
+            _dataLoader = dataLoader;
         }
 
         private async void OpenAction()
@@ -34,60 +37,8 @@ namespace DataLoader.ViewModels
             var openFileDialog = new OpenFileDialog { Multiselect = true };
 
             if (openFileDialog.ShowDialog() != true) return;
-
-
-            await LoadFiles(openFileDialog.FileNames);
-        }
-
-        private async Task LoadFiles(string[] fileNames)
-        {
-            await Task.Run(() =>
-            {
-                if (fileNames.Any(fileName => !File.Exists(fileName))) return;
-
-                _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, fileNames.Length, 0));
-                var count = 0;
-
-                Tags.Clear();
-                try
-                {
-                    foreach (var fileName in fileNames)
-                    {
-                        var read = File.ReadAllLines(fileName);
-
-                        foreach (var line in read)
-                        {
-                            var strings = line.Split(',');
-
-                            var id = strings[1];
-                            var x = double.Parse(strings[2], CultureInfo.InvariantCulture);
-                            var y = double.Parse(strings[3], CultureInfo.InvariantCulture);
-                            var z = double.Parse(strings[4], CultureInfo.InvariantCulture);
-                            var batteryPower = strings[5];
-                            var timestamp = double.Parse(strings[6], CultureInfo.InvariantCulture);
-                            var unit = strings[7];
-                            var dqi = strings[8];
-
-                            if (Tags.All(tag => tag.Id != id))
-                            {
-                                Tags.Add(new Tag(id, new List<TimeCoordinate>()));
-                            }
-                            Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new TimeCoordinate(x, y, z, batteryPower, timestamp, unit, dqi));
-                        }
-
-                        _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, fileNames.Length, ++count));
-                    }
-
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e);
-                    Tags.Clear();
-                }
-                RaisePropertyChanged(nameof(Tags));
-            });
-
-            _eventAggregator.GetEvent<DataEvent>().Publish(new DataEventModel(Tags, TagEventType.Loaded));
+            
+            await _dataLoader.LoadFiles(openFileDialog.FileNames);
         }
     }
 }

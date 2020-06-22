@@ -55,12 +55,12 @@ namespace PipelineService
             return true;
         }
 
-        private async void StartPipeLine(PipelineStartEventModel model)
+        public async Task<IDictionary<string, Tag>> StartSilentPipeline(PipelineStartEventModel model)
         {
-            if(model.Tag == null) return;
+            if (model.Tag == null) return new Dictionary<string, Tag>();
 
             var history = new Dictionary<string, Tag>();
-            
+
             var tempTag = model.Tag;
             history.Add("Original", tempTag);
 
@@ -73,6 +73,13 @@ namespace PipelineService
                 }
             }
 
+            return history;
+        }
+
+        private async void StartPipeLine(PipelineStartEventModel model)
+        {
+
+            var history = await StartSilentPipeline(model);
             _eventAggregator.GetEvent<PipelineCompletedEvent>().Publish(history);
         }
     }

@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
     <AssemblyName>LinePlot</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
@@ -10,6 +11,7 @@
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1422" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataLoader\DataLoader.csproj" />
     <ProjectReference Include="..\Lib\Lib.csproj" />
     <ProjectReference Include="..\PipelineService\PipelineService.csproj" />
   </ItemGroup>
