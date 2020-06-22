@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="ZonePlot.Views.ZonePipelineView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZonePlot.Views"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             mvvm:ViewModelLocator.AutoWireViewModel="True">
+    <UserControl.Resources>
+        <DataTemplate x:Key="DataTemplate" DataType="system:String">
+            <TextBlock Text="{Binding FallbackValue=No content}"/>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <ListView ItemsSource="{Binding PointsInZones}" ItemTemplate="{StaticResource DataTemplate}"/>
+        <Button Content="Calculate" Command="{Binding CalculateCommand}" Height="20" VerticalAlignment="Bottom"/>
+    </Grid>
+</UserControl>

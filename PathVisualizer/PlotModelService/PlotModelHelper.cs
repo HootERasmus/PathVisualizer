@@ -66,6 +66,27 @@ namespace PlotModelService
             });
         }
 
+        public async Task<PlotModel> PlotTagAndZonesOnLinePlotModel(PlotModel model, Tag tag, List<List<DataPoint>> zones, PlotSettingsEventModel settings)
+        {
+            return await Task.Run(() =>
+            {
+                var lineColor = Color.FromName(settings.LineColor);
+                model.Series.Clear();
+                var dataPoints = ConvertIntoDataPoints(tag);
+
+                model.Series.Add(new LineSeries { Title = tag.Id, ItemsSource = dataPoints, Color = OxyColor.FromRgb(lineColor.R, lineColor.G, lineColor.B) });
+
+                foreach (var zone in zones)
+                {
+                    model.Series.Add(new LineSeries {ItemsSource = zone, Color = OxyColor.FromRgb(255,0, 0) });
+                }
+
+                model.LegendBackground = OxyColor.FromRgb(255, 255, 255);
+
+                return model;
+            });
+        }
+
         public PlotModel ApplyLinePlotSettings(PlotModel model, PlotSettingsEventModel settings)
         {
             lock (_lockObject)
