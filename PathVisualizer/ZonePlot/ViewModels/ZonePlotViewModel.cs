@@ -44,7 +44,14 @@ namespace ZonePlot.ViewModels
             _eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
             _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
             _eventAggregator.GetEvent<ZoneChangeEvent>().Subscribe(PlotZone);
-            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(tag => _tag = tag?.Values.Last());
+            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(tag =>
+            {
+                if (tag.Values.Any())
+                {
+                    _tag = tag.Values.Last();
+                }
+                
+            });
 
             Settings = plotSettingService.LoadPlotSettings();
             ApplyPlotSettings(Settings);
@@ -54,7 +61,8 @@ namespace ZonePlot.ViewModels
 
         private async void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
         {
-            await PlotLine(history.Values.Last(), _zones);
+            if(history.Values.Any())
+                await PlotLine(history.Values.Last(), _zones);
         }
 
         private async void PlotZone(Zone zone)

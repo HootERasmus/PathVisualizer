@@ -94,6 +94,12 @@ namespace Filters.ViewModels
         {
             var index = FiltersInUse.IndexOf(SelectedFilter);
             Swap(FiltersInUse, index, index+1);
+
+            RemoveFiltersFromPipeline(new List<IFilter>
+            {
+                FiltersInUse[index],
+                FiltersInUse[index+1]
+            });
         }
 
         private bool CanMoveFilterDown()
@@ -105,6 +111,12 @@ namespace Filters.ViewModels
         {
             var index = FiltersInUse.IndexOf(SelectedFilter);
             Swap(FiltersInUse, index, index - 1);
+
+            RemoveFiltersFromPipeline(new List<IFilter>
+            {
+                FiltersInUse[index],
+                FiltersInUse[index-1]
+            });
         }
 
         private bool CanMoveFilterUp()
@@ -117,7 +129,7 @@ namespace Filters.ViewModels
             FiltersInUse.Add(filter);
         }
 
-        public static void Swap<T>(IList<T> list, int indexA, int indexB)
+        public void Swap<T>(IList<T> list, int indexA, int indexB)
         {
             T tmp = list[indexA];
             list[indexA] = list[indexB];
@@ -153,12 +165,12 @@ namespace Filters.ViewModels
                     FiltersInUse.Add(filter);
             }
 
-            AddFiltersToPipeline();
+            AddFiltersToPipeline(FiltersInUse.ToList());
         }
 
-        private void AddFiltersToPipeline()
+        private void AddFiltersToPipeline(List<IFilter> filters)
         {
-            foreach (var filter in FiltersInUse)
+            foreach (var filter in filters)
             {
                 _pipeline.AddActionToPipe(filter.Name, tag =>
                 {
@@ -173,9 +185,9 @@ namespace Filters.ViewModels
             }
         }
 
-        private void RemoveFiltersFromPipeline()
+        private void RemoveFiltersFromPipeline(List<IFilter> filters)
         {
-            foreach (var filter in _removedFilters)
+            foreach (var filter in filters)
             {
                 _pipeline.RemoveActionFromPipe(filter.Name, 2);
             }
@@ -188,8 +200,8 @@ namespace Filters.ViewModels
         {
             SaveFilters();
 
-            RemoveFiltersFromPipeline();
-            AddFiltersToPipeline();
+            RemoveFiltersFromPipeline(_removedFilters);
+            AddFiltersToPipeline(FiltersInUse.ToList());
 
             _eventAggregator.GetEvent<PipelineStartEvent>().Publish(new PipelineStartEventModel(this, _lastTag));
         }

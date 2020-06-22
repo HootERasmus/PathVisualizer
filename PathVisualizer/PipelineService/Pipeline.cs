@@ -9,18 +9,18 @@ namespace PipelineService
 {
     public class Pipeline : IPipeline
     {
-        private readonly List<Dictionary<string,Func<Tag, Task<Tag>>>> _stages;
+        private readonly List<List<KeyValuePair<string,Func<Tag, Task<Tag>>>>> _stages;
         private readonly IEventAggregator _eventAggregator;
 
         public Pipeline(IEventAggregator eventAggregator)
         {
-            _stages = new List<Dictionary<string, Func<Tag, Task<Tag>>>>(5)
+            _stages = new List<List<KeyValuePair<string, Func<Tag, Task<Tag>>>>>(5)
             {
-                new Dictionary<string, Func<Tag, Task<Tag>>>(),
-                new Dictionary<string, Func<Tag, Task<Tag>>>(),
-                new Dictionary<string, Func<Tag, Task<Tag>>>(),
-                new Dictionary<string, Func<Tag, Task<Tag>>>(),
-                new Dictionary<string, Func<Tag, Task<Tag>>>()
+                new List<KeyValuePair<string,Func<Tag, Task<Tag>>>>(),
+                new List<KeyValuePair<string,Func<Tag, Task<Tag>>>>(),
+                new List<KeyValuePair<string,Func<Tag, Task<Tag>>>>(),
+                new List<KeyValuePair<string,Func<Tag, Task<Tag>>>>(),
+                new List<KeyValuePair<string,Func<Tag, Task<Tag>>>>(),
             };
 
             _eventAggregator = eventAggregator;
@@ -31,7 +31,9 @@ namespace PipelineService
         {
             try
             {
-                _stages.ElementAt(stage).Add(key, action);
+                var pair = _stages.ElementAt(stage).FirstOrDefault(x => x.Key == key);
+                if (pair.Key == default)
+                    _stages.ElementAt(stage).Add(new KeyValuePair<string, Func<Tag, Task<Tag>>>(key, action));
             }
             catch (Exception)
             {
@@ -45,7 +47,9 @@ namespace PipelineService
         {
             try
             {
-                _stages.ElementAt(stage).Remove(key);
+                var pair = _stages.ElementAt(stage).FirstOrDefault(x => x.Key == key);
+                if(pair.Key != default)
+                    _stages.ElementAt(stage).Remove(pair);
             }
             catch (Exception)
             {

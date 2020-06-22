@@ -126,6 +126,27 @@ namespace PlotModelService
             model.Axes.Add(new LinearColorAxis { Position = AxisPosition.Right, Palette = OxyPalettes.Jet(100)});
             model.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = settings.XAxisTitle, Minimum = settings.XAxisMinimum, Maximum = settings.XAxisMaximum });
             model.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = settings.YAxisTitle, Minimum = settings.YAxisMinimum,  Maximum = settings.YAxisMaximum });
+
+            // Set image as background
+            if (!File.Exists(settings.BackgroundImage)) return model;
+
+            using var fs = new FileStream(settings.BackgroundImage, FileMode.Open);
+            var image0 = new OxyImage(fs);
+
+            var imageAnnotation = new ImageAnnotation
+            {
+                ImageSource = image0,
+                Opacity = 0.5,
+                X = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
+                Y = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
+                Width = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
+                Height = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
+                Layer = AnnotationLayer.AboveSeries,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Middle,
+                Interpolate = true
+            };
+            model.Annotations.Add(imageAnnotation);
             return model;
         }
 
@@ -147,7 +168,7 @@ namespace PlotModelService
 
                 try
                 {
-                    if (points[x, y] <= 10)
+                    if (points[x, y] < 10)
                         points[x, y]++;
                 }
                 catch (Exception e)
