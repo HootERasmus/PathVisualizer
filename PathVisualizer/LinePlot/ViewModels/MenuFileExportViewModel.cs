@@ -11,6 +11,7 @@ using PipelineService;
 using PlotModelService;
 using Prism.Commands;
 using Prism.Events;
+using SettingsService;
 using Tag = Lib.SharedModels.Tag;
 
 namespace LinePlot.ViewModels
@@ -74,7 +75,7 @@ namespace LinePlot.ViewModels
             if (string.IsNullOrEmpty(dialog.FileName)) return;
 
             var plotModel = new PlotModel();
-            plotModel = await _plotModelHelper.ApplyLinePlotSettings(plotModel, _settings);
+            plotModel = _plotModelHelper.ApplyLinePlotSettings(plotModel, _settings);
             plotModel = await _plotModelHelper.PlotTagOnLinePlotModel(plotModel, _tag, _settings);
             _plotModelHelper.ExportImage(plotModel, dialog.FileName, _backgroundHeight, _backgroundWidth);
         }

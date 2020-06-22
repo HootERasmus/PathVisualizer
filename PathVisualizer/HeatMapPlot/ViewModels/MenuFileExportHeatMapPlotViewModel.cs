@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows;
-using Lib.Events;
-using Lib.SharedModels;
 using MetadataExtractor;
 using Microsoft.Win32;
 using OxyPlot;
@@ -13,6 +9,7 @@ using PipelineService;
 using PlotModelService;
 using Prism.Commands;
 using Prism.Events;
+using SettingsService;
 using Tag = Lib.SharedModels.Tag;
 
 namespace HeatMapPlot.ViewModels
@@ -76,7 +73,7 @@ namespace HeatMapPlot.ViewModels
             if (string.IsNullOrEmpty(dialog.FileName)) return;
 
             var plotModel = new PlotModel();
-            plotModel = await _plotModelHelper.ApplyHeatMapPlotSettings(plotModel, _settings);
+            plotModel = _plotModelHelper.ApplyHeatMapPlotSettings(plotModel, _settings);
             plotModel = await _plotModelHelper.PlotTagOnHeatMapPlotModel(plotModel, _tag, _settings);
             _plotModelHelper.ExportImage(plotModel, dialog.FileName, _backgroundHeight, _backgroundWidth);
         }

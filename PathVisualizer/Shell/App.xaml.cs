@@ -6,6 +6,7 @@ using OxyPlot;
 using PipelineService;
 using PlotModelService;
 using Prism.Modularity;
+using SettingsService;
 
 namespace Shell
 {
@@ -24,6 +25,7 @@ namespace Shell
             containerRegistry.RegisterSingleton<IPipeline, Pipeline>();
             containerRegistry.RegisterSingleton<IDataLoader, DataLoader>();
             containerRegistry.RegisterSingleton<IPlotModelHelper, PlotModelHelper>();
+            containerRegistry.RegisterSingleton<IPlotSettingService, PlotSettingsService>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

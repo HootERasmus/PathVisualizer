@@ -3,6 +3,7 @@ using PlotSettings.Views;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using SettingsService;
 
 namespace PlotSettings.ViewModels
 {
@@ -13,10 +14,10 @@ namespace PlotSettings.ViewModels
         private PlotSettingsWindow _plotSettingsWindow;
 
 
-        public MenuViewPlotSettingsViewModel(IEventAggregator eventAggregator)
+        public MenuViewPlotSettingsViewModel(IEventAggregator eventAggregator, IPlotSettingService plotSettingService)
         {
             OpenPlotSettingsCommand = new DelegateCommand(OpenPlotSettingsAction);
-            _plotSettingsViewModel = new PlotSettingsViewModel(eventAggregator);
+            _plotSettingsViewModel = new PlotSettingsViewModel(eventAggregator, plotSettingService);
         }
 
         private void OpenPlotSettingsAction()

@@ -11,6 +11,7 @@ using MetadataExtractor;
 using OxyPlot;
 using PlotModelService;
 using Prism.Events;
+using SettingsService;
 
 namespace LinePlot.ViewModels
 {
@@ -73,7 +74,7 @@ namespace LinePlot.ViewModels
                 var filteredTag = history.Values.Last();
 
                 var plotModel = new PlotModel();
-                plotModel = await _plotModelHelper.ApplyLinePlotSettings(plotModel, _settings);
+                plotModel = _plotModelHelper.ApplyLinePlotSettings(plotModel, _settings);
                 plotModel = await _plotModelHelper.PlotTagOnLinePlotModel(plotModel, filteredTag, _settings);
                 _plotModelHelper.ExportImage(plotModel, $"{fdb.SelectedPath}/{tag.Id}.png", _backgroundHeight, _backgroundWidth);
                 _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, _dataLoader.Tags.Count, ++count));

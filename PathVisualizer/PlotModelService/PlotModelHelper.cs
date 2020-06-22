@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using Lib.SharedModels;
 using OxyPlot;
@@ -11,6 +10,7 @@ using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.Wpf;
+using SettingsService;
 using HeatMapSeries = OxyPlot.Series.HeatMapSeries;
 using LinearAxis = OxyPlot.Axes.LinearAxis;
 using LinearColorAxis = OxyPlot.Axes.LinearColorAxis;
@@ -20,11 +20,11 @@ namespace PlotModelService
 {
     public class PlotModelHelper : IPlotModelHelper
     {
-        private Mutex _mutex;
+        private readonly object _lockObject;
 
         public PlotModelHelper()
         {
-            _mutex = new Mutex();
+            _lockObject = new object();
         }
 
         public async Task<PlotModel> PlotTagOnLinePlotModel(PlotModel model, Tag tag, PlotSettingsEventModel settings)
@@ -66,58 +66,46 @@ namespace PlotModelService
             });
         }
 
-        public async Task<PlotModel> ApplyLinePlotSettings(PlotModel model, PlotSettingsEventModel settings)
+        public PlotModel ApplyLinePlotSettings(PlotModel model, PlotSettingsEventModel settings)
         {
-            return await Task.Run(() =>
+            lock (_lockObject)
             {
                 
+                model.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = settings.XAxisTitle, Minimum = settings.XAxisMinimum, Maximum = settings.XAxisMaximum });
+                model.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = settings.YAxisTitle, Minimum = settings.YAxisMinimum, Maximum = settings.YAxisMaximum });
 
-                try
+                // Set image as background
+                if (!File.Exists(settings.BackgroundImage)) return model;
+
+                using var fs = new FileStream(settings.BackgroundImage, FileMode.Open);
+                var image0 = new OxyImage(fs);
+
+                var imageAnnotation = new ImageAnnotation
                 {
-                    _mutex.WaitOne();
-                    model.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = settings.XAxisTitle, Minimum = settings.XAxisMinimum, Maximum = settings.XAxisMaximum });
-                    model.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = settings.YAxisTitle, Minimum = settings.YAxisMinimum, Maximum = settings.YAxisMaximum });
-
-                    // Set image as background
-                    using var fs = new FileStream(settings.BackgroundImage, FileMode.Open);
-                    var image0 = new OxyImage(fs);
-
-                    var imageAnnotation = new ImageAnnotation
-                    {
-                        ImageSource = image0,
-                        Opacity = 1,
-                        X = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
-                        Y = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
-                        Width = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
-                        Height = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
-                        Layer = AnnotationLayer.BelowSeries,
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        VerticalAlignment = VerticalAlignment.Middle,
-                        Interpolate = true
-                    };
-                    model.Annotations.Add(imageAnnotation);
-                }
-                finally
-                {
-                    _mutex.ReleaseMutex();
-                }
+                    ImageSource = image0,
+                    Opacity = 1,
+                    X = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
+                    Y = new PlotLength(0.5, PlotLengthUnit.RelativeToPlotArea),
+                    Width = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
+                    Height = new PlotLength(1, PlotLengthUnit.RelativeToPlotArea),
+                    Layer = AnnotationLayer.BelowSeries,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Middle,
+                    Interpolate = true
+                };
+                model.Annotations.Add(imageAnnotation);
                 return model;
 
-            });
-            
+            }
         }
 
-        public async Task<PlotModel> ApplyHeatMapPlotSettings(PlotModel model, PlotSettingsEventModel settings)
+        public PlotModel ApplyHeatMapPlotSettings(PlotModel model, PlotSettingsEventModel settings)
         {
-            return await Task.Run(() =>
-            {
-                // Color axis (the X and Y axes are generated automatically)
-                model.Axes.Add(new LinearColorAxis { Position = AxisPosition.Right, Palette = OxyPalettes.Jet(100)});
-                model.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = settings.XAxisTitle, Minimum = settings.XAxisMinimum, Maximum = settings.XAxisMaximum });
-                model.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = settings.YAxisTitle, Minimum = settings.YAxisMinimum,  Maximum = settings.YAxisMaximum });
-                return model;
-            });
-
+            // Color axis (the X and Y axes are generated automatically)
+            model.Axes.Add(new LinearColorAxis { Position = AxisPosition.Right, Palette = OxyPalettes.Jet(100)});
+            model.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = settings.XAxisTitle, Minimum = settings.XAxisMinimum, Maximum = settings.XAxisMaximum });
+            model.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = settings.YAxisTitle, Minimum = settings.YAxisMinimum,  Maximum = settings.YAxisMaximum });
+            return model;
         }
 
         public void ExportImage(PlotModel model, string path, int height, int width)

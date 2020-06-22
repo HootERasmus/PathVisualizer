@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PlotSettings {
+namespace SettingsService {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

@@ -4,12 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using Lib.Events;
-using Lib.SharedModels;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using SettingsService;
 
 namespace PlotSettings.ViewModels
 {
@@ -35,10 +34,13 @@ namespace PlotSettings.ViewModels
         public DelegateCommand ApplyCommand { get; set; }
         
         private readonly IEventAggregator _eventAggregator;
+        private readonly IPlotSettingService _plotSettingService;
 
-        public PlotSettingsViewModel(IEventAggregator eventAggregator)
+        public PlotSettingsViewModel(IEventAggregator eventAggregator, IPlotSettingService plotSettingService)
         {
             _eventAggregator = eventAggregator;
+            _plotSettingService = plotSettingService;
+
             BrowseImageCommand = new DelegateCommand(BrowseImageAction);
             OkCommand = new DelegateCommand<Window>(OkAction);
             CancelCommand = new DelegateCommand<Window>(CancelAction);
@@ -54,16 +56,16 @@ namespace PlotSettings.ViewModels
                 Colors.Add(c.Name);
             }
 
-            Settings = LoadSettings();
-
-            ApplyCommand.Execute();
+            Settings = _plotSettingService.LoadPlotSettings();
         }
 
 
         private void BrowseImageAction()
         {
-            var openFileDialog = new OpenFileDialog { Multiselect = false };
-            openFileDialog.Filter = "Image files|*.png;*.PNG;*.bmp;*.BMP";
+            var openFileDialog = new OpenFileDialog
+            {
+                Multiselect = false, Filter = "Image files|*.png;*.PNG;*.bmp;*.BMP"
+            };
             if (openFileDialog.ShowDialog() != true) return;
 
             var fileNames = openFileDialog.FileNames;
@@ -75,7 +77,7 @@ namespace PlotSettings.ViewModels
 
         private void OkAction(Window window)
         {
-            SaveSettings(Settings);
+            _plotSettingService.SavePlotSettings(Settings);
             _eventAggregator.GetEvent<PlotSettingsEvent>().Publish(Settings);
             window.Close();
         }
@@ -87,46 +89,10 @@ namespace PlotSettings.ViewModels
 
         private void ApplyAction()
         {
-            SaveSettings(Settings);
+            _plotSettingService.SavePlotSettings(Settings);
             _eventAggregator.GetEvent<PlotSettingsEvent>().Publish(Settings);
         }
 
-        private void SaveSettings(PlotSettingsEventModel model)
-        {
-            UserSettings.Default.XAxisTitle = model.XAxisTitle;
-            UserSettings.Default.YAxisTitle = model.YAxisTitle;
-
-            UserSettings.Default.XAxisMinimum = model.XAxisMinimum;
-            UserSettings.Default.XAxisMaximum = model.XAxisMaximum;
-
-            UserSettings.Default.YAxisMinimum = model.YAxisMinimum;
-            UserSettings.Default.YAxisMaximum = model.YAxisMaximum;
-
-            UserSettings.Default.BackgroundImagePath = model.BackgroundImage;
-
-            UserSettings.Default.LineColor = model.LineColor;
-            UserSettings.Default.DotColor = model.DotColor;
-
-            UserSettings.Default.Save();
-
-        }
-
-        private PlotSettingsEventModel LoadSettings()
-        {
-            var model = new PlotSettingsEventModel
-            {
-                XAxisTitle = UserSettings.Default.XAxisTitle,
-                YAxisTitle = UserSettings.Default.YAxisTitle,
-                XAxisMinimum = UserSettings.Default.XAxisMinimum,
-                XAxisMaximum = UserSettings.Default.XAxisMaximum,
-                YAxisMinimum = UserSettings.Default.YAxisMinimum,
-                YAxisMaximum = UserSettings.Default.YAxisMaximum,
-                BackgroundImage = UserSettings.Default.BackgroundImagePath,
-                LineColor = UserSettings.Default.LineColor,
-                DotColor = UserSettings.Default.DotColor
-            };
-            
-            return model;
-        }
+        
     }
 }

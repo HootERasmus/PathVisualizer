@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lib\Lib.csproj" />
+    <ProjectReference Include="..\PlotSettings\PlotSettings.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

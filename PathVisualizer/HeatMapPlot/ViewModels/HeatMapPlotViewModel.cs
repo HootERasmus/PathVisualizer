@@ -12,6 +12,7 @@ using OxyPlot.Series;
 using PipelineService;
 using PlotModelService;
 using Prism.Events;
+using SettingsService;
 
 namespace HeatMapPlot.ViewModels
 {
@@ -36,12 +37,14 @@ namespace HeatMapPlot.ViewModels
 
         private readonly IPlotModelHelper _plotModelHelper;
 
-        public HeatMapPlotViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper)
+        public HeatMapPlotViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper, IPlotSettingService plotSettingService)
         {
             eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
             eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
 
             _plotModelHelper = plotModelHelper;
+            Settings = plotSettingService.LoadPlotSettings();
+            ApplyPlotSettings(Settings);
         }
 
         private async void OnPipelineCompletedEvent(IDictionary<string,Tag> history)
@@ -66,7 +69,7 @@ namespace HeatMapPlot.ViewModels
             
             MyPlotModel = new PlotModel();
 
-            MyPlotModel = await _plotModelHelper.ApplyHeatMapPlotSettings(MyPlotModel, Settings);
+            MyPlotModel = _plotModelHelper.ApplyHeatMapPlotSettings(MyPlotModel, Settings);
             
             RaisePropertyChanged(nameof(MyPlotModel));
             MyPlotModel.InvalidatePlot(true);

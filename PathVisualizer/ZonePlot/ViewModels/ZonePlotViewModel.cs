@@ -1,28 +1,29 @@
-﻿using Prism.Mvvm;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Lib.Events;
+using Lib.SharedModels;
 using OxyPlot;
 using PipelineService;
 using PlotModelService;
+using Prism.Mvvm;
 using Prism.Events;
 using SettingsService;
-using Tag = Lib.SharedModels.Tag;
 
-namespace LinePlot.ViewModels
+namespace ZonePlot.ViewModels
 {
-    public class LinePlotViewModel : BindableBase
+    public class ZonePlotViewModel : BindableBase
     {
         public PlotModel MyPlotModel { get; set; }
         public PlotSettingsEventModel Settings { get; set; }
         public Tag SelectedTag { get; set; }
 
         private readonly IPlotModelHelper _plotModelHelper;
-        
-        public LinePlotViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper, IPlotSettingService plotSettingService)
+
+        public ZonePlotViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper, IPlotSettingService plotSettingService)
         {
             _plotModelHelper = plotModelHelper;
-            
+
             eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
             eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
 
@@ -44,7 +45,7 @@ namespace LinePlot.ViewModels
             RaisePropertyChanged(nameof(MyPlotModel));
             MyPlotModel.InvalidatePlot(true);
         }
-        
+
         private async void ApplyPlotSettings(PlotSettingsEventModel model)
         {
             Settings = model;

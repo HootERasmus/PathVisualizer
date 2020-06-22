@@ -11,6 +11,7 @@ using PipelineService;
 using PlotModelService;
 using Prism.Commands;
 using Prism.Events;
+using SettingsService;
 
 namespace HeatMapPlot.ViewModels
 {
@@ -73,7 +74,7 @@ namespace HeatMapPlot.ViewModels
                 var filteredTag = history.Values.Last();
 
                 var plotModel = new PlotModel();
-                plotModel = await _plotModelHelper.ApplyHeatMapPlotSettings(plotModel, _settings);
+                plotModel = _plotModelHelper.ApplyHeatMapPlotSettings(plotModel, _settings);
                 plotModel = await _plotModelHelper.PlotTagOnHeatMapPlotModel(plotModel, filteredTag, _settings);
                 _plotModelHelper.ExportImage(plotModel, $"{fdb.SelectedPath}/{tag.Id}.png", _backgroundHeight, _backgroundWidth);
                 _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, _dataLoader.Tags.Count, ++count));

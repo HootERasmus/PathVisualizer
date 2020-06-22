@@ -1,5 +1,11 @@
-﻿namespace Lib.SharedModels
+﻿using Prism.Events;
+
+namespace SettingsService
 {
+    public class PlotSettingsEvent : PubSubEvent<PlotSettingsEventModel>
+    {
+    }
+
     public class PlotSettingsEventModel
     {
         public PlotSettingsEventModel()
