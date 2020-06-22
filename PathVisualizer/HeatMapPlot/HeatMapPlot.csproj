@@ -3,14 +3,18 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <AssemblyName>HeatMapPlot</AssemblyName>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="MetadataExtractor" Version="2.4.2" />
     <PackageReference Include="OxyPlot.Wpf" Version="2.0.0" />
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1422" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataLoaderService\DataLoaderService.csproj" />
     <ProjectReference Include="..\Lib\Lib.csproj" />
     <ProjectReference Include="..\PipelineService\PipelineService.csproj" />
+    <ProjectReference Include="..\PlotModelService\PlotModelService.csproj" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /Y $(TargetPath) $(SolutionDir)\Shell\bin\Debug\netcoreapp3.0\ExtensionModules" />

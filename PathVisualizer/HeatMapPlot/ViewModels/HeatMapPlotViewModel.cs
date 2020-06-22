@@ -10,6 +10,7 @@ using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using PipelineService;
+using PlotModelService;
 using Prism.Events;
 
 namespace HeatMapPlot.ViewModels
@@ -33,16 +34,14 @@ namespace HeatMapPlot.ViewModels
             }
         }
 
-        private double[,] _dataPoints;
+        private readonly IPlotModelHelper _plotModelHelper;
 
-        private int _xOffSet;
-        private int _yOffSet;
-
-        public HeatMapPlotViewModel(IEventAggregator eventAggregator)
+        public HeatMapPlotViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper)
         {
-            var eventAggregator1 = eventAggregator;
-            eventAggregator1.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
-            eventAggregator1.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
+            eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
+            eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
+
+            _plotModelHelper = plotModelHelper;
         }
 
         private async void OnPipelineCompletedEvent(IDictionary<string,Tag> history)
@@ -53,50 +52,10 @@ namespace HeatMapPlot.ViewModels
         private async Task PlotHeatMap(Tag tag)
         {
             SelectedTag = tag;
+            MyPlotModel = await _plotModelHelper.PlotTagOnHeatMapPlotModel(MyPlotModel, SelectedTag, Settings);
 
-            await Task.Run(() =>
-            {
-                MyPlotModel.Series.Clear();
-
-                _dataPoints = ConvertIntoDataPoints(tag, 1);
-
-                var heatMapSeries = new HeatMapSeries
-                {
-                    X0 = Settings.XAxisMinimum,
-                    X1 = Settings.XAxisMaximum,
-                    Y0 = Settings.YAxisMinimum,
-                    Y1 = Settings.YAxisMaximum,
-                    Interpolate = true,
-                    RenderMethod = HeatMapRenderMethod.Bitmap,
-                    Data = _dataPoints
-                };
-
-                MyPlotModel.Series.Add(heatMapSeries);
-                RaisePropertyChanged(nameof(MyPlotModel));
-                MyPlotModel.InvalidatePlot(true);
-            });
-        }
-
-        private double[,] ConvertIntoDataPoints(Tag tag, int squareSize)
-        {
-            var points = new double[((int)Settings.XAxisMaximum - (int)Settings.XAxisMinimum)/squareSize, ((int)Settings.YAxisMaximum - (int)Settings.YAxisMinimum)/squareSize];
-            
-            foreach (var timeCoordinate in tag.TimeCoordinates)
-            {
-                var x = (int) timeCoordinate.X + _xOffSet;
-                var y = (int) timeCoordinate.Y + _yOffSet;
-            
-                try
-                {
-                    if(points[x, y] <= 10)
-                        points[x, y]++;
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e);
-                }
-            }
-            return points;
+            RaisePropertyChanged(nameof(MyPlotModel));
+            MyPlotModel.InvalidatePlot(true);
         }
 
         private async void ApplyPlotSettings(PlotSettingsEventModel model)
@@ -104,16 +63,11 @@ namespace HeatMapPlot.ViewModels
             Settings = model;
 
             BackgroundImage = Settings.BackgroundImage;
-            _xOffSet = (int)Math.Abs(Settings.XAxisMinimum);
-            _yOffSet = (int) Math.Abs(Settings.YAxisMinimum);
-
+            
             MyPlotModel = new PlotModel();
 
-            // Color axis (the X and Y axes are generated automatically)
-            MyPlotModel.Axes.Add(new LinearColorAxis { Position = AxisPosition.Right, Palette = OxyPalettes.Jet(100) });
-            MyPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = model.XAxisTitle, Minimum = model.XAxisMinimum, Maximum = model.XAxisMaximum });
-            MyPlotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = model.YAxisTitle, Minimum = model.YAxisMinimum, Maximum = model.YAxisMaximum });
-
+            MyPlotModel = await _plotModelHelper.ApplyHeatMapPlotSettings(MyPlotModel, Settings);
+            
             RaisePropertyChanged(nameof(MyPlotModel));
             MyPlotModel.InvalidatePlot(true);
 

@@ -2,7 +2,9 @@
 using Shell.Views;
 using System.Windows;
 using DataLoaderService;
+using OxyPlot;
 using PipelineService;
+using PlotModelService;
 using Prism.Modularity;
 
 namespace Shell
@@ -21,6 +23,7 @@ namespace Shell
         {
             containerRegistry.RegisterSingleton<IPipeline, Pipeline>();
             containerRegistry.RegisterSingleton<IDataLoader, DataLoader>();
+            containerRegistry.RegisterSingleton<IPlotModelHelper, PlotModelHelper>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

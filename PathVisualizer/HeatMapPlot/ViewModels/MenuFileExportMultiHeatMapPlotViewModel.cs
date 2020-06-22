@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using PipelineService;
-using Prism.Commands;
 using System.Windows.Forms;
 using DataLoaderService;
 using Lib.Events;
 using Lib.SharedModels;
 using MetadataExtractor;
 using OxyPlot;
+using PipelineService;
 using PlotModelService;
+using Prism.Commands;
 using Prism.Events;
 
-namespace LinePlot.ViewModels
+namespace HeatMapPlot.ViewModels
 {
-    public class MenuFileExportMultiLinePlotViewModel
+    public class MenuFileExportMultiHeatMapPlotViewModel
     {
         public DelegateCommand ExportCommand { get; set; }
         private readonly IPipeline _pipeline;
@@ -25,7 +25,7 @@ namespace LinePlot.ViewModels
         private int _backgroundHeight;
         private int _backgroundWidth;
 
-        public MenuFileExportMultiLinePlotViewModel(IPipeline pipeline, IDataLoader dataLoader, IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper)
+        public MenuFileExportMultiHeatMapPlotViewModel(IPipeline pipeline, IDataLoader dataLoader, IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper)
         {
             _pipeline = pipeline;
             _dataLoader = dataLoader;
@@ -33,7 +33,7 @@ namespace LinePlot.ViewModels
             _plotModelHelper = plotModelHelper;
             _backgroundHeight = 800;
             _backgroundWidth = 600;
-            
+
             _eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(SaveSettings);
 
             ExportCommand = new DelegateCommand(ExportAction);
@@ -63,7 +63,7 @@ namespace LinePlot.ViewModels
             var result = fdb.ShowDialog();
 
             if (result != DialogResult.OK || string.IsNullOrWhiteSpace(fdb.SelectedPath)) return;
-            
+
             _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, _dataLoader.Tags.Count, 0));
             var count = 0;
 
@@ -73,8 +73,8 @@ namespace LinePlot.ViewModels
                 var filteredTag = history.Values.Last();
 
                 var plotModel = new PlotModel();
-                plotModel = await _plotModelHelper.ApplyLinePlotSettings(plotModel, _settings);
-                plotModel = await _plotModelHelper.PlotTagOnLinePlotModel(plotModel, filteredTag, _settings);
+                plotModel = await _plotModelHelper.ApplyHeatMapPlotSettings(plotModel, _settings);
+                plotModel = await _plotModelHelper.PlotTagOnHeatMapPlotModel(plotModel, filteredTag, _settings);
                 _plotModelHelper.ExportImage(plotModel, $"{fdb.SelectedPath}/{tag.Id}.png", _backgroundHeight, _backgroundWidth);
                 _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, _dataLoader.Tags.Count, ++count));
             }

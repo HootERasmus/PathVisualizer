@@ -6,6 +6,7 @@ using Lib.Events;
 using Lib.SharedModels;
 using OxyPlot;
 using PipelineService;
+using PlotModelService;
 using Prism.Events;
 using Tag = Lib.SharedModels.Tag;
 
@@ -16,6 +17,8 @@ namespace LinePlot.ViewModels
         public PlotModel MyPlotModel { get; set; }
         public PlotSettingsEventModel Settings { get; set; }
         public Tag SelectedTag { get; set; }
+
+        private readonly IPlotModelHelper _plotModelHelper;
 
         private string _backgroundImage;
         public string BackgroundImage
@@ -30,8 +33,10 @@ namespace LinePlot.ViewModels
             }
         }
         
-        public LinePlotViewModel(IEventAggregator eventAggregator)
+        public LinePlotViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper)
         {
+            _plotModelHelper = plotModelHelper;
+
             eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
             eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
         }
@@ -45,7 +50,7 @@ namespace LinePlot.ViewModels
         {
             SelectedTag = tag;
 
-            await PlotModelHelper.PlotTagOnPlotModel(MyPlotModel, SelectedTag, Settings);
+            await _plotModelHelper.PlotTagOnLinePlotModel(MyPlotModel, SelectedTag, Settings);
 
             RaisePropertyChanged(nameof(MyPlotModel));
             MyPlotModel.InvalidatePlot(true);
@@ -58,7 +63,7 @@ namespace LinePlot.ViewModels
             BackgroundImage = Settings.BackgroundImage;
 
             MyPlotModel = new PlotModel();
-            MyPlotModel = await PlotModelHelper.ApplySettings(MyPlotModel, Settings);
+            MyPlotModel = await _plotModelHelper.ApplyLinePlotSettings(MyPlotModel, Settings);
 
             RaisePropertyChanged(nameof(MyPlotModel));
             MyPlotModel.InvalidatePlot(true);

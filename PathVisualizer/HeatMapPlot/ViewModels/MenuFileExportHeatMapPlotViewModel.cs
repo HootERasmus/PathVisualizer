@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using Lib.Events;
 using Lib.SharedModels;
@@ -13,9 +15,9 @@ using Prism.Commands;
 using Prism.Events;
 using Tag = Lib.SharedModels.Tag;
 
-namespace LinePlot.ViewModels
+namespace HeatMapPlot.ViewModels
 {
-    public class MenuFileExportViewModel
+    public class MenuFileExportHeatMapPlotViewModel
     {
         public DelegateCommand ExportCommand { get; set; }
 
@@ -26,7 +28,7 @@ namespace LinePlot.ViewModels
         private int _backgroundHeight;
         private int _backgroundWidth;
 
-        public MenuFileExportViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper)
+        public MenuFileExportHeatMapPlotViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper)
         {
             eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(history => _tag = history.Values.Last());
             eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(SaveSettings);
@@ -53,8 +55,8 @@ namespace LinePlot.ViewModels
                 Debug.WriteLine(e);
             }
         }
-        
-        private async void  ExportAction()
+
+        private async void ExportAction()
         {
             if (_tag == null)
             {
@@ -74,8 +76,8 @@ namespace LinePlot.ViewModels
             if (string.IsNullOrEmpty(dialog.FileName)) return;
 
             var plotModel = new PlotModel();
-            plotModel = await _plotModelHelper.ApplyLinePlotSettings(plotModel, _settings);
-            plotModel = await _plotModelHelper.PlotTagOnLinePlotModel(plotModel, _tag, _settings);
+            plotModel = await _plotModelHelper.ApplyHeatMapPlotSettings(plotModel, _settings);
+            plotModel = await _plotModelHelper.PlotTagOnHeatMapPlotModel(plotModel, _tag, _settings);
             _plotModelHelper.ExportImage(plotModel, dialog.FileName, _backgroundHeight, _backgroundWidth);
         }
     }

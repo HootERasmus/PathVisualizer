@@ -14,6 +14,7 @@
     <ProjectReference Include="..\DataLoader\DataLoader.csproj" />
     <ProjectReference Include="..\Lib\Lib.csproj" />
     <ProjectReference Include="..\PipelineService\PipelineService.csproj" />
+    <ProjectReference Include="..\PlotModelService\PlotModelService.csproj" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /Y $(TargetPath) $(SolutionDir)\Shell\bin\Debug\netcoreapp3.0\ExtensionModules" />

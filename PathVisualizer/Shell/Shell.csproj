@@ -14,5 +14,6 @@
     <ProjectReference Include="..\DataLoaderService\DataLoaderService.csproj" />
     <ProjectReference Include="..\Lib\Lib.csproj" />
     <ProjectReference Include="..\PipelineService\PipelineService.csproj" />
+    <ProjectReference Include="..\PlotModelService\PlotModelService.csproj" />
   </ItemGroup>
 </Project>

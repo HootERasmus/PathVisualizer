@@ -12,8 +12,7 @@ namespace LinePlot
             regionManager.RegisterViewWithRegion(Lib.RegionNames.PlotRegion, typeof(LinePlotView));
             regionManager.RegisterViewWithRegion(Lib.RegionNames.BannerLineRegion, typeof(BannerNavigationView));
             regionManager.RegisterViewWithRegion(Lib.RegionNames.MenuRegionFileExport, typeof(MenuFileExportView));
-            regionManager.RegisterViewWithRegion(Lib.RegionNames.MenuRegionFileExport,
-                typeof(MenuFileExportMultiLinePlotView));
+            regionManager.RegisterViewWithRegion(Lib.RegionNames.MenuRegionFileExport, typeof(MenuFileExportMultiLinePlotView));
         }
 
         public void OnInitialized(IContainerProvider containerProvider)
