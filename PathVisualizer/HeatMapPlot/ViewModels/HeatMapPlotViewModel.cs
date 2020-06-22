@@ -1,14 +1,10 @@
-﻿using System;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Lib.Events;
 using Lib.SharedModels;
 using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
 using PipelineService;
 using PlotModelService;
 using Prism.Events;
@@ -21,7 +17,9 @@ namespace HeatMapPlot.ViewModels
         public PlotModel MyPlotModel { get; set; }
         public PlotSettingsEventModel Settings { get; set; }
         public Tag SelectedTag { get; set; }
-        
+
+        public ObservableCollection<string> PipelineHistory { get; set; }
+
         private string _backgroundImage;
         public string BackgroundImage
         {
@@ -39,6 +37,8 @@ namespace HeatMapPlot.ViewModels
 
         public HeatMapPlotViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper, IPlotSettingService plotSettingService)
         {
+            PipelineHistory = new ObservableCollection<string>();
+
             eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
             eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
 
@@ -49,6 +49,13 @@ namespace HeatMapPlot.ViewModels
 
         private async void OnPipelineCompletedEvent(IDictionary<string,Tag> history)
         {
+            PipelineHistory.Clear();
+
+            foreach (var tag in history)
+            {
+                PipelineHistory.Add($"{tag.Key} - {tag.Value.TimeCoordinates.Count}");
+            }
+
             await PlotHeatMap(history.Values.Last());
         }
 

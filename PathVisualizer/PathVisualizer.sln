@@ -25,17 +25,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeatMapPlot", "HeatMapPlot\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Progress", "Progress\Progress.csproj", "{24636834-F3A5-4952-86D2-9C6BB096E1DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pipeline", "Pipeline\Pipeline.csproj", "{7D8401D2-3719-41AB-9873-7D6D7272DBE4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PipelineService", "PipelineService\PipelineService.csproj", "{02EB7960-877F-4C4C-81E9-96B07B0360AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLoaderService", "DataLoaderService\DataLoaderService.csproj", "{41BD8D9B-FDA4-441E-9306-1533A766C927}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLoaderService", "DataLoaderService\DataLoaderService.csproj", "{41BD8D9B-FDA4-441E-9306-1533A766C927}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlotModelService", "PlotModelService\PlotModelService.csproj", "{77448D8E-0476-4D13-A9F4-18CE75518CE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlotModelService", "PlotModelService\PlotModelService.csproj", "{77448D8E-0476-4D13-A9F4-18CE75518CE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZonePlot", "ZonePlot\ZonePlot.csproj", "{F8E4F2B8-B155-4717-9561-362046FB2789}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZonePlot", "ZonePlot\ZonePlot.csproj", "{F8E4F2B8-B155-4717-9561-362046FB2789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingsService", "SettingsService\SettingsService.csproj", "{2F30A389-EE2E-4321-9948-D0BDC85A2BFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SettingsService", "SettingsService\SettingsService.csproj", "{2F30A389-EE2E-4321-9948-D0BDC85A2BFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,10 +85,6 @@ Global
 		{24636834-F3A5-4952-86D2-9C6BB096E1DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24636834-F3A5-4952-86D2-9C6BB096E1DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24636834-F3A5-4952-86D2-9C6BB096E1DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D8401D2-3719-41AB-9873-7D6D7272DBE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D8401D2-3719-41AB-9873-7D6D7272DBE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D8401D2-3719-41AB-9873-7D6D7272DBE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D8401D2-3719-41AB-9873-7D6D7272DBE4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{02EB7960-877F-4C4C-81E9-96B07B0360AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{02EB7960-877F-4C4C-81E9-96B07B0360AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02EB7960-877F-4C4C-81E9-96B07B0360AA}.Release|Any CPU.ActiveCfg = Release|Any CPU

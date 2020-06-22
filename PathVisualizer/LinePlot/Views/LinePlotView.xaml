@@ -8,8 +8,22 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              prism:ViewModelLocator.AutoWireViewModel="True">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="DataTemplate" DataType="system:String">
+            <TextBlock Text="{Binding  FallbackValue=No content}"/>
+        </DataTemplate>
+    </UserControl.Resources>
+
     <Grid>
-        <oxy:PlotView Model="{Binding MyPlotModel}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <oxy:PlotView Model="{Binding MyPlotModel}" Grid.Column="0"/>
+        <ListView ItemsSource="{Binding PipelineHistory}" ItemTemplate="{StaticResource DataTemplate}" Grid.Column="1"/>
     </Grid>
 </UserControl>

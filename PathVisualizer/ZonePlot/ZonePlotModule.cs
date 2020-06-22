@@ -12,7 +12,6 @@ namespace ZonePlot
             regionManager.RegisterViewWithRegion(Lib.RegionNames.PlotRegion, typeof(ZonePlotView));
             regionManager.RegisterViewWithRegion(Lib.RegionNames.BannerLineRegion, typeof(BannerNavigationView));
             regionManager.RegisterViewWithRegion(Lib.RegionNames.MenuRegionTool, typeof(MenuToolZoneView));
-            regionManager.RegisterViewWithRegion(Lib.RegionNames.PipelineRegion, typeof(ZonePipelineView));
         }
 
         public void OnInitialized(IContainerProvider containerProvider)
@@ -20,7 +19,6 @@ namespace ZonePlot
             containerProvider.Resolve<ZonePlotView>();
             containerProvider.Resolve<BannerNavigationView>();
             containerProvider.Resolve<MenuToolZoneView>();
-            containerProvider.Resolve<ZonePipelineView>();
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
@@ -28,8 +26,6 @@ namespace ZonePlot
             containerRegistry.Register<ZonePlotView>();
             containerRegistry.Register<BannerNavigationView>();
             containerRegistry.Register<MenuToolZoneView>();
-            containerRegistry.Register<ZonePipelineView>();
-
         }
     }
 }

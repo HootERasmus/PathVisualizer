@@ -17,7 +17,6 @@ namespace ZonePlot.ViewModels
         public override void NavigateAction()
         {
             RegionManager.RequestNavigate(RegionNames.PlotRegion, NavigationView);
-            RegionManager.RequestNavigate(RegionNames.PipelineRegion, new Uri("/ZonePipelineView", UriKind.Relative));
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Lib.Events;
@@ -21,34 +21,35 @@ namespace ZonePlot.ViewModels
         public PlotModel MyPlotModel { get; set; }
         public PlotSettingsEventModel Settings { get; set; }
         public Tag SelectedTag { get; set; }
+        public ObservableCollection<string> PointsInZones { get; set; }
+        public DelegateCommand CalculateCommand { get; set; }
+        private readonly List<int> _pointsInsideZones;
+        private Tag _tag;
+
         private readonly List<Zone> _zones;
-        private readonly Dictionary<Guid, int> _pointsInsideZones;
-        private readonly ZoneUserSettingsService _zoneUserSettingsService;
         private readonly IPlotModelHelper _plotModelHelper;
         private readonly IEventAggregator _eventAggregator;
-        private readonly IPipeline _pipeline;
-        public DelegateCommand TestCommand { get; set; }
 
-        public ZonePlotViewModel(IEventAggregator eventAggregator, IPipeline pipeline, IPlotModelHelper plotModelHelper, IPlotSettingService plotSettingService)
+        public ZonePlotViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper, IPlotSettingService plotSettingService)
         {
+            PointsInZones = new ObservableCollection<string>();
             _plotModelHelper = plotModelHelper;
+
+            CalculateCommand = new DelegateCommand(CalculateAction);
+
+            var zoneUserSettingsService = new ZoneUserSettingsService();
+            _zones = zoneUserSettingsService.LoadZones(eventAggregator);
             
-            _zoneUserSettingsService = new ZoneUserSettingsService();
-            _zones = _zoneUserSettingsService.LoadZones(eventAggregator);
-            _pipeline = pipeline;
-
-            ZoneService.Service.Zones = _zones;
-
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
             _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
             _eventAggregator.GetEvent<ZoneChangeEvent>().Subscribe(PlotZone);
+            _eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(tag => _tag = tag?.Values.Last());
 
             Settings = plotSettingService.LoadPlotSettings();
             ApplyPlotSettings(Settings);
-
-            _zones = new List<Zone>();
-            _pointsInsideZones = new Dictionary<Guid, int>();
+            
+            _pointsInsideZones = new List<int>();
         }
 
         private async void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
@@ -68,9 +69,6 @@ namespace ZonePlot.ViewModels
             if(SelectedTag == null) return;
             
             await PlotLine(SelectedTag, _zones);
-
-            ZoneService.Service.Zones.Clear();
-            ZoneService.Service.Zones = _zones;
 
             RaisePropertyChanged(nameof(MyPlotModel));
             MyPlotModel.InvalidatePlot(true);
@@ -106,6 +104,40 @@ namespace ZonePlot.ViewModels
             if (SelectedTag != null)
             {
                 await PlotLine(SelectedTag, _zones);
+            }
+        }
+
+        private async void CalculateAction()
+        {
+            PointsInZones.Clear();
+
+            await Task.Run(() =>
+            {
+                if (_tag == null) return;
+
+                _pointsInsideZones.Clear();
+                var count = 0;
+
+                _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, _zones.Count, count));
+                for (int i = 0; i < _zones.Count; i++)
+                {
+                    _pointsInsideZones.Add(0);
+                    foreach (var coordinate in _tag.TimeCoordinates)
+                    {
+                        if (_zones[i].IsPointInsideZone(new DataPoint(coordinate.X, coordinate.Y)))
+                        {
+                            _pointsInsideZones[i]++;
+                        }
+                    }
+                    _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, _zones.Count, ++count));
+                }
+            });
+
+
+            for (int i = 0; i < _pointsInsideZones.Count; i++)
+            {
+
+                PointsInZones.Add($"Zone {i} - {_pointsInsideZones[i]}");
             }
         }
     }

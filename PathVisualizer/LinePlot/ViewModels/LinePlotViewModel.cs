@@ -1,5 +1,6 @@
 ﻿using Prism.Mvvm;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using OxyPlot;
@@ -16,12 +17,14 @@ namespace LinePlot.ViewModels
         public PlotModel MyPlotModel { get; set; }
         public PlotSettingsEventModel Settings { get; set; }
         public Tag SelectedTag { get; set; }
+        public ObservableCollection<string> PipelineHistory { get; set; }
 
         private readonly IPlotModelHelper _plotModelHelper;
         
         public LinePlotViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper, IPlotSettingService plotSettingService)
         {
             _plotModelHelper = plotModelHelper;
+            PipelineHistory = new ObservableCollection<string>();
             
             eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
             eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
@@ -32,6 +35,13 @@ namespace LinePlot.ViewModels
 
         private async void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
         {
+            PipelineHistory.Clear();
+
+            foreach (var tag in history)
+            {
+                PipelineHistory.Add($"{tag.Key} - {tag.Value.TimeCoordinates.Count}");
+            }
+
             await PlotLine(history.Values.Last());
         }
 

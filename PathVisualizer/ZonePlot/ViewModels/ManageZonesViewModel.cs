@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -16,7 +15,9 @@ namespace ZonePlot.ViewModels
         public DelegateCommand AddZoneCommand { get; set; }
         public DelegateCommand RemoveZoneCommand { get; set; }
         public DelegateCommand ClosingCommand { get; set; }
-        
+
+        private Zone _lastSelectedZone;
+
         private Zone _selectedZone;
         public Zone SelectedZone
         {
@@ -27,6 +28,9 @@ namespace ZonePlot.ViewModels
 
                 _selectedZone = value;
                 RaisePropertyChanged();
+                RemoveZoneCommand.RaiseCanExecuteChanged();
+                if(SelectedZone != null)
+                    _lastSelectedZone = _selectedZone;
             }
         }
 
@@ -41,7 +45,7 @@ namespace ZonePlot.ViewModels
             Zones = new ObservableCollection<Zone>(_settingsService.LoadZones(_eventAggregator));
 
             AddZoneCommand = new DelegateCommand(AddZoneAction);
-            RemoveZoneCommand = new DelegateCommand(RemoveZoneAction);
+            RemoveZoneCommand = new DelegateCommand(RemoveZoneAction, CanRemoveZoneAction);
             ClosingCommand = new DelegateCommand(ClosingAction);
         }
 
@@ -52,9 +56,17 @@ namespace ZonePlot.ViewModels
 
         private void RemoveZoneAction()
         {
-            SelectedZone.PointsInText = string.Empty;
-            _eventAggregator.GetEvent<ZoneChangeEvent>().Publish(SelectedZone);
-            Zones.Remove(SelectedZone);
+            
+            _lastSelectedZone.PointsInText = string.Empty;
+            _eventAggregator.GetEvent<ZoneChangeEvent>().Publish(_lastSelectedZone);
+            Zones.Remove(_lastSelectedZone);
+            _lastSelectedZone = null;
+            RemoveZoneCommand.RaiseCanExecuteChanged();
+        }
+
+        private bool CanRemoveZoneAction()
+        {
+            return _lastSelectedZone != null;
         }
 
         private void ClosingAction()

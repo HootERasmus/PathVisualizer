@@ -12,12 +12,13 @@ namespace ZonePlot.Models
     public class Zone : BindableBase
     {
         private readonly IEventAggregator _eventAggregator;
-
-        public Zone(IEventAggregator eventAggregator)
+        
+        public Zone(IEventAggregator eventAggregator, string pointsInText = "", Guid zoneId = default)
         {
             _eventAggregator = eventAggregator;
-            PointsInText = string.Empty;
-            ZoneId = Guid.NewGuid();
+            _pointsInText = pointsInText;
+
+            ZoneId = zoneId == default ? Guid.NewGuid() : zoneId;
         }
 
         public Guid ZoneId { get; }

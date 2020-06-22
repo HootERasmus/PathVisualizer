@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Prism.Events;
 using ZonePlot.Models;
@@ -13,7 +15,7 @@ namespace ZonePlot
 
             foreach (var zone in zones)
             {
-                sb.Append($"{zone.PointsInText}|");
+                sb.Append($"{zone.ZoneId}]{zone.PointsInText}|");
             }
 
             if (sb.Length != 0)
@@ -30,9 +32,16 @@ namespace ZonePlot
 
             var split = filtersString.Split('|');
 
+            if(split.Length == 1 && string.IsNullOrEmpty(split.First()))
+                return new List<Zone>();
+
             foreach (var item in split)
             {
-                zones.Add(new Zone(eventAggregator) { PointsInText = item });
+                var items = item.Split(']');
+
+                zones.Add(Guid.TryParse(items[0], out var guid)
+                    ? new Zone(eventAggregator, items[1], guid)
+                    : new Zone(eventAggregator, items[0]));
             }
 
             return zones;

@@ -49,16 +49,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <!--<ColumnDefinition Width="Auto"/>-->
-                    </Grid.ColumnDefinitions>
-                    <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.PlotRegion}" Grid.Column="0" />
-                    <!--<GridSplitter HorizontalAlignment="Left" Background="Black" ShowsPreview="True" Width="5" Grid.Column="1"/>-->
-                    <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.PipelineRegion}" Grid.Column="1" />
-                </Grid>
+                <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.PlotRegion}" Grid.Row="0" />
                 <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.TimePickingRegion}" Grid.Row="1" />
             </Grid>
         </Grid>

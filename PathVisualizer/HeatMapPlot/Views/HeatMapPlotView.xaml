@@ -15,13 +15,14 @@
             <TextBlock Text="{Binding  FallbackValue=No content}"/>
         </DataTemplate>
     </UserControl.Resources>
-        <Grid>
+
+    <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="22*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <oxy:PlotView Model="{Binding MyPlotModel}" Background="Transparent" Grid.Column="0" Grid.Row="0" />
-        <ListView Grid.Column="1" ItemsSource="{Binding PipelineHistory}" ItemTemplate="{StaticResource DataTemplate}"/>
+        <oxy:PlotView Model="{Binding MyPlotModel}" Grid.Column="0"/>
+        <ListView ItemsSource="{Binding PipelineHistory}" ItemTemplate="{StaticResource DataTemplate}" Grid.Column="1"/>
     </Grid>
 </UserControl>
