@@ -52,12 +52,12 @@ namespace ZonePlot.ViewModels
             _pointsInsideZones = new List<int>();
         }
 
-        private async void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
+        private async void OnPipelineCompletedEvent(IList<PipelineCompletedEventModel> history)
         {
-            if (history.Values.Any())
+            if (history.Any())
             {
-                _tag = history.Values.Last();
-                await PlotLine(history.Values.Last(), _zones);
+                _tag = history.Last().Tag;
+                await PlotLine(history.Last().Tag, _zones);
             }
         }
 

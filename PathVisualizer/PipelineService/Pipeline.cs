@@ -59,21 +59,21 @@ namespace PipelineService
             return true;
         }
 
-        public async Task<IDictionary<string, Tag>> StartSilentPipeline(PipelineStartEventModel model)
+        public async Task<IList<PipelineCompletedEventModel>> StartSilentPipeline(PipelineStartEventModel model)
         {
-            if (model.Tag == null) return new Dictionary<string, Tag>();
+            if (model.Tag == null) return new List<PipelineCompletedEventModel>();
 
-            var history = new Dictionary<string, Tag>();
+            var history = new List<PipelineCompletedEventModel>();
 
             var tempTag = model.Tag;
-            history.Add("Original", tempTag);
+            history.Add(new PipelineCompletedEventModel("Original", tempTag));
 
             foreach (var stage in _stages)
             {
                 foreach (var action in stage)
                 {
                     tempTag = await action.Value(tempTag);
-                    history.Add(action.Key, tempTag);
+                    history.Add(new PipelineCompletedEventModel(action.Key, tempTag));
                 }
             }
 

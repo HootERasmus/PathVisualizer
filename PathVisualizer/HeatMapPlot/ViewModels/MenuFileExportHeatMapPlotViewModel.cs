@@ -37,10 +37,10 @@ namespace HeatMapPlot.ViewModels
             ExportCommand = new DelegateCommand(ExportAction);
         }
 
-        private void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
+        private void OnPipelineCompletedEvent(IList<PipelineCompletedEventModel> history)
         {
-            if (history.Values.Any())
-                _tag = history.Values.Last();
+            if (history.Any())
+                _tag = history.Last().Tag;
         }
 
         private void SaveSettings(PlotSettingsEventModel model)

@@ -47,17 +47,17 @@ namespace HeatMapPlot.ViewModels
             ApplyPlotSettings(Settings);
         }
 
-        private async void OnPipelineCompletedEvent(IDictionary<string,Tag> history)
+        private async void OnPipelineCompletedEvent(IList<PipelineCompletedEventModel> history)
         {
             PipelineHistory.Clear();
 
             foreach (var tag in history)
             {
-                PipelineHistory.Add($"{tag.Key} - {tag.Value.TimeCoordinates.Count}");
+                PipelineHistory.Add($"{tag.Name} - {tag.Tag.TimeCoordinates.Count}");
             }
 
-            if (history.Values.Any())
-                await PlotHeatMap(history.Values.Last());
+            if (history.Any())
+                await PlotHeatMap(history.Last().Tag);
         }
 
         private async Task PlotHeatMap(Tag tag)

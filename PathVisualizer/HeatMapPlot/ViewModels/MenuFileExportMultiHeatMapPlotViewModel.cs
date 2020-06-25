@@ -71,7 +71,7 @@ namespace HeatMapPlot.ViewModels
             foreach (var tag in _dataLoader.Tags)
             {
                 var history = await _pipeline.StartSilentPipeline(new PipelineStartEventModel(this, tag));
-                var filteredTag = history.Values.Last();
+                var filteredTag = history.Last().Tag;
 
                 var plotModel = new PlotModel();
                 plotModel = _plotModelHelper.ApplyHeatMapPlotSettings(plotModel, _settings);
