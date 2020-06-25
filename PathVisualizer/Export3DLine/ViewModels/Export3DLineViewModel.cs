@@ -31,7 +31,8 @@ namespace Export3DLine.ViewModels
 
         private void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
         {
-            _tag = history.Values.Last();
+            if (history.Values.Any())
+                _tag = history.Values.Last();
         }
 
         private async void Export3DLineAction()

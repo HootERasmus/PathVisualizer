@@ -47,7 +47,7 @@
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.PlotRegion}" Grid.Row="0" />
                 <ContentControl prism:RegionManager.RegionName="{x:Static lib:RegionNames.TimePickingRegion}" Grid.Row="1" />

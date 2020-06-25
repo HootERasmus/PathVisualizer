@@ -41,8 +41,9 @@ namespace LinePlot.ViewModels
             {
                 PipelineHistory.Add($"{tag.Key} - {tag.Value.TimeCoordinates.Count}");
             }
-
-            await PlotLine(history.Values.Last());
+            
+            if (history.Values.Any())
+                await PlotLine(history.Values.Last());
         }
 
         private async Task PlotLine(Tag tag)

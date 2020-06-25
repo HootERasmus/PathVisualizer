@@ -24,9 +24,7 @@ namespace Filters.Models
                 var bufferX = new double[Period];
                 var bufferY = new double[Period];
                 var currentIndex = 0;
-
-
-
+                
                 foreach (var point in originalData)
                 {
                     bufferX[currentIndex] = point.X / Period;

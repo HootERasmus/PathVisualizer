@@ -49,6 +49,9 @@ namespace TimePicker.ViewModels
 
                 RaisePropertyChanged();
                 UpperTimeValueDateTime = FromUnixTime(UpperTimeValue);
+
+                if (FreezeTimeWindow)
+                    LowerTimeValue = value - _timeWindow;
             }
         }
 
@@ -63,6 +66,9 @@ namespace TimePicker.ViewModels
 
                 RaisePropertyChanged();
                 LowerTimeValueDateTime = FromUnixTime(LowerTimeValue);
+
+                if (FreezeTimeWindow)
+                    UpperTimeValue = value + _timeWindow;
             }
         }
 
@@ -91,8 +97,22 @@ namespace TimePicker.ViewModels
             }
         }
 
+        private bool _freezeTimeWindow;
+        public bool FreezeTimeWindow
+        {
+            get => _freezeTimeWindow;
+            set
+            {
+                if (value == FreezeTimeWindow) return;
+
+                _freezeTimeWindow = value;
+                _timeWindow = UpperTimeValue - LowerTimeValue;
+                RaisePropertyChanged();
+            }
+        }
+        private double _timeWindow;
+
         private readonly IEventAggregator _eventAggregator;
-        private readonly IPipeline _pipeline;
         private Tag _lastTag;
 
 
@@ -105,8 +125,7 @@ namespace TimePicker.ViewModels
 
             MouseButtonUpCommand = new DelegateCommand(MouseButtonUpAction);
 
-            _pipeline = pipeline;
-            _pipeline.AddActionToPipe(nameof(CutTimeFromTag),CutTimeFromTag, 1);
+            pipeline.AddActionToPipe(nameof(CutTimeFromTag),CutTimeFromTag, 1);
         }
 
         private Task<Tag> CutTimeFromTag(Tag tag)

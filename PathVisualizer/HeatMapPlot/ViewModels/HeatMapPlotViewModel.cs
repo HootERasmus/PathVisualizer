@@ -56,7 +56,8 @@ namespace HeatMapPlot.ViewModels
                 PipelineHistory.Add($"{tag.Key} - {tag.Value.TimeCoordinates.Count}");
             }
 
-            await PlotHeatMap(history.Values.Last());
+            if (history.Values.Any())
+                await PlotHeatMap(history.Values.Last());
         }
 
         private async Task PlotHeatMap(Tag tag)

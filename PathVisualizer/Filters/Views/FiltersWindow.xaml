@@ -8,7 +8,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         xmlns:prism="http://prismlibrary.com/"
-        Title="FiltersWindow" Height="450" Width="300">
+        Title="FiltersWindow" Height="450" Width="483">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
@@ -27,7 +27,15 @@
             <RowDefinition Height="187*"/>
             <RowDefinition Height="55"/>
         </Grid.RowDefinitions>
-        <ListView ItemsSource="{Binding FiltersInUse}" SelectedItem="{Binding SelectedFilter}" ItemTemplate="{StaticResource ShowFilter}"/>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ListView ItemsSource="{Binding FiltersInUse}" SelectedItem="{Binding SelectedFilter}" ItemTemplate="{StaticResource ShowFilter}" Grid.Column="0" Background="AntiqueWhite"/>
+            <ContentControl Content="{Binding ContentControlView}" Grid.Column="1"/>
+        </Grid>
+        
         <Border Background="AliceBlue" Grid.Column="0" Grid.Row="1" Margin="0,2,0,0"/>
         <Button Content="+" FontWeight="Bold" Command="{Binding AddFilterCommand}" FontFamily="Areal" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"  FontSize="25" Height="35" Width="35" Grid.Row="1"/>
         <Button Content="-" FontWeight="Bold" Command="{Binding RemoveFilterCommand}" FontFamily="Areal" HorizontalAlignment="Left" Margin="55,10,0,0" VerticalAlignment="Top"  FontSize="25" Height="35" Width="35" Grid.Row="1"/>

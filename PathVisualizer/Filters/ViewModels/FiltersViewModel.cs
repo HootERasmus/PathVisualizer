@@ -48,6 +48,17 @@ namespace Filters.ViewModels
         private readonly AddFilterViewModel _addFilterViewModel;
         private Tag _lastTag;
 
+        private FrameworkElement _contentControlView;
+        public FrameworkElement ContentControlView
+        {
+            get => _contentControlView;
+            set
+            {
+                _contentControlView = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public FiltersViewModel(IEventAggregator eventAggregator, IPipeline pipeline)
         {
             AddFilterCommand = new DelegateCommand(AddFilterAction);
@@ -70,7 +81,6 @@ namespace Filters.ViewModels
             _pipeline = pipeline;
             _removedFilters = new List<IFilter>();
             LoadFilters();
-
         }
 
         private void AddFilterAction()
