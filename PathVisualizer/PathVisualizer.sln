@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZonePlot", "ZonePlot\ZonePl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SettingsService", "SettingsService\SettingsService.csproj", "{2F30A389-EE2E-4321-9948-D0BDC85A2BFB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimePlayer", "TimePlayer\TimePlayer.csproj", "{28A48DA3-8AB5-411D-90BF-18833E8FF2BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{2F30A389-EE2E-4321-9948-D0BDC85A2BFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F30A389-EE2E-4321-9948-D0BDC85A2BFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F30A389-EE2E-4321-9948-D0BDC85A2BFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28A48DA3-8AB5-411D-90BF-18833E8FF2BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28A48DA3-8AB5-411D-90BF-18833E8FF2BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28A48DA3-8AB5-411D-90BF-18833E8FF2BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28A48DA3-8AB5-411D-90BF-18833E8FF2BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

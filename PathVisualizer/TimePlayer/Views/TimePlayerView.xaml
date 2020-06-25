@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="TimePlayer.Views.TimePlayerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TimePlayer.Views"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="800"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:pipelineService="clr-namespace:PipelineService;assembly=PipelineService"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             prism:ViewModelLocator.AutoWireViewModel="True" 
+             Background="Aquamarine">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="DataTemplate" DataType="pipelineService:PipelineCompletedEventModel">
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} - {1}">
+                        <Binding Path="Name"/>
+                        <Binding Path="Tag.TimeCoordinates.Count"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <oxy:PlotView Model="{Binding MyPlotModel}" Grid.Column="0"/>
+            <!--<oxy:PlotView Model="{Binding MyDotPlotModel}" Grid.Column="0"/>-->
+            <ListView ItemsSource="{Binding PipelineHistory}" ItemTemplate="{StaticResource DataTemplate}" Grid.Column="1" />
+        </Grid>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding CurrentTime,FallbackValue=Current value}" HorizontalAlignment="Left" Margin="5,5,5,5"/>
+            <Slider Grid.Column="1" Margin="5,5,5,5" Minimum="{Binding MinimumTimeValue}" Maximum="{Binding MaximumTimeValue}" Value="{Binding CurrentTimeValue}"/>
+            <TextBlock Grid.Column="2" Text="{Binding MaxTime,FallbackValue=Max value}" HorizontalAlignment="Right" Margin="5,5,5,5"/>
+        </Grid>
+        
+        <Button Grid.Row="2" Content="Slower" Command="{Binding SlowerCommand}" HorizontalAlignment="Center" Width="80" Margin="-200,5,5,5"/>
+        <Button Grid.Row="2" Content="{Binding PlayPauseText, FallbackValue=Play}" Command="{Binding PlayPauseCommand}" HorizontalAlignment="Center" Width="80" Margin="5,5,5,5"/>
+        <Button Grid.Row="2" Content="Faster" Command="{Binding FasterCommand}" HorizontalAlignment="Center" Width="80" Margin="200,5,5,5"/>
+        <TextBlock Grid.Row="2" Text="{Binding Speed, FallbackValue=No Speed, StringFormat={}Speed: {0}}" HorizontalAlignment="Left" Margin="5,5,5,5" TextWrapping="Wrap"/>
+</Grid>
+</UserControl>

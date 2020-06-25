@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="TimePlayer.Views.BannerNavigationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TimePlayer.Views"
+             xmlns:mvvm="http://prismlibrary.com/"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             mvvm:ViewModelLocator.AutoWireViewModel="True" >
+    <Grid>
+        <Button Content="{Binding ButtonContent, FallbackValue=No Content}" Command="{Binding NavigateCommand}" Padding="2,2,2,2" Margin="5,5,5,5" />
+    </Grid>
+</UserControl>
