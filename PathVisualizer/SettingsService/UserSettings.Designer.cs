@@ -130,5 +130,53 @@ namespace SettingsService {
                 this["DotColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TimeOffSetDays {
+            get {
+                return ((int)(this["TimeOffSetDays"]));
+            }
+            set {
+                this["TimeOffSetDays"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TimeOffSetHours {
+            get {
+                return ((int)(this["TimeOffSetHours"]));
+            }
+            set {
+                this["TimeOffSetHours"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TimeOffSetMinutes {
+            get {
+                return ((int)(this["TimeOffSetMinutes"]));
+            }
+            set {
+                this["TimeOffSetMinutes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TimeOffSetSeconds {
+            get {
+                return ((int)(this["TimeOffSetSeconds"]));
+            }
+            set {
+                this["TimeOffSetSeconds"] = value;
+            }
+        }
     }
 }

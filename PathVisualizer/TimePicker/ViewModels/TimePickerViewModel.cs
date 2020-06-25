@@ -7,6 +7,7 @@ using Lib.SharedModels;
 using PipelineService;
 using Prism.Commands;
 using Prism.Events;
+using SettingsService;
 
 namespace TimePicker.ViewModels
 {
@@ -48,7 +49,7 @@ namespace TimePicker.ViewModels
                 _upperTimeValue = value;
 
                 RaisePropertyChanged();
-                UpperTimeValueDateTime = FromUnixTime(UpperTimeValue);
+                RaisePropertyChanged(nameof(UpperTimeValueDateTime));
 
                 if (FreezeTimeWindow)
                     LowerTimeValue = value - _timeWindow;
@@ -65,37 +66,15 @@ namespace TimePicker.ViewModels
                 _lowerTimeValue = value;
 
                 RaisePropertyChanged();
-                LowerTimeValueDateTime = FromUnixTime(LowerTimeValue);
+                RaisePropertyChanged(nameof(LowerTimeValueDateTime));
 
                 if (FreezeTimeWindow)
                     UpperTimeValue = value + _timeWindow;
             }
         }
 
-        private DateTime _upperTimeValueDateTime;
-        public DateTime UpperTimeValueDateTime
-        {
-            get => _upperTimeValueDateTime;
-            set
-            {
-                if (value == UpperTimeValueDateTime) return;
-                _upperTimeValueDateTime = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private DateTime _lowerTimeValueDateTime;
-        public DateTime LowerTimeValueDateTime
-        {
-            get => _lowerTimeValueDateTime;
-            set
-            {
-                if (value == LowerTimeValueDateTime) return;
-                _lowerTimeValueDateTime = value;
-
-                RaisePropertyChanged();
-            }
-        }
+        public DateTime UpperTimeValueDateTime => FromUnixTime(UpperTimeValue);
+        public DateTime LowerTimeValueDateTime => FromUnixTime(LowerTimeValue);
 
         private bool _freezeTimeWindow;
         public bool FreezeTimeWindow
@@ -115,17 +94,28 @@ namespace TimePicker.ViewModels
         private readonly IEventAggregator _eventAggregator;
         private Tag _lastTag;
 
-
         public DelegateCommand MouseButtonUpCommand { get; set; }
 
-        public TimePickerViewModel(IEventAggregator eventAggregator, IPipeline pipeline)
+        private PlotSettingsEventModel _settings;
+
+        public TimePickerViewModel(IEventAggregator eventAggregator, IPipeline pipeline, IPlotSettingService plotSettingService)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<TagSelectionEvent>().Subscribe(CalculateTime);
+            _eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(OnApplySettings);
 
             MouseButtonUpCommand = new DelegateCommand(MouseButtonUpAction);
 
             pipeline.AddActionToPipe(nameof(CutTimeFromTag),CutTimeFromTag, 1);
+
+            _settings = plotSettingService.LoadPlotSettings();
+        }
+
+        private void OnApplySettings(PlotSettingsEventModel model)
+        {
+            _settings = model;
+            RaisePropertyChanged(nameof(UpperTimeValueDateTime));
+            RaisePropertyChanged(nameof(LowerTimeValueDateTime));
         }
 
         private Task<Tag> CutTimeFromTag(Tag tag)
@@ -154,10 +144,10 @@ namespace TimePicker.ViewModels
             LowerTimeValue = MinimumTime;
         }
 
-        public static DateTime FromUnixTime(double unixTime)
+        public DateTime FromUnixTime(double unixTime)
         {
-            return Epoch.AddSeconds(unixTime);
+            return _epoch.AddSeconds(unixTime + _settings.TimeOffSet.TotalSeconds);
         }
-        private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private readonly DateTime _epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -27,13 +28,19 @@ namespace HeatMapPlot.ViewModels
 
         public MenuFileExportHeatMapPlotViewModel(IEventAggregator eventAggregator, IPlotModelHelper plotModelHelper)
         {
-            eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(history => _tag = history.Values.Last());
+            eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
             eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(SaveSettings);
             _backgroundHeight = 800;
             _backgroundWidth = 600;
             _plotModelHelper = plotModelHelper;
 
             ExportCommand = new DelegateCommand(ExportAction);
+        }
+
+        private void OnPipelineCompletedEvent(IDictionary<string, Tag> history)
+        {
+            if (history.Values.Any())
+                _tag = history.Values.Last();
         }
 
         private void SaveSettings(PlotSettingsEventModel model)

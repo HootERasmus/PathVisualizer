@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,63 @@ namespace PlotSettings.ViewModels
                 RaisePropertyChanged();
             }
         }
+
+        private int _timeOffSetDays;
+        public int TimeOffSetDays
+        {
+            get => _timeOffSetDays;
+            set
+            {
+                if (value == TimeOffSetDays) return;
+
+                Settings.TimeOffSet = new TimeSpan(value, TimeOffSetHours, TimeOffSetMinutes, TimeOffSetSeconds);
+                _timeOffSetDays = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _timeOffSetHours;
+        public int TimeOffSetHours
+        {
+            get => _timeOffSetHours;
+            set
+            {
+                if (value == TimeOffSetHours) return;
+
+                Settings.TimeOffSet = new TimeSpan(TimeOffSetDays, value, TimeOffSetMinutes, TimeOffSetSeconds);
+                _timeOffSetHours = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _timeOffSetMinutes;
+        public int TimeOffSetMinutes
+        {
+            get => _timeOffSetMinutes;
+            set
+            {
+                if (value == TimeOffSetMinutes) return;
+
+                Settings.TimeOffSet = new TimeSpan(TimeOffSetDays, TimeOffSetHours, value, TimeOffSetSeconds);
+                _timeOffSetMinutes = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _timeOffSetSeconds;
+        public int TimeOffSetSeconds
+        {
+            get => _timeOffSetSeconds;
+            set
+            {
+                if(value == TimeOffSetSeconds) return;
+
+                Settings.TimeOffSet = new TimeSpan(TimeOffSetDays,TimeOffSetHours ,TimeOffSetMinutes, value );
+                _timeOffSetSeconds = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public PlotSettingsEventModel Settings { get; set; }
         public ObservableCollection<string> Colors { get; set; }
         
@@ -57,6 +115,10 @@ namespace PlotSettings.ViewModels
             }
 
             Settings = _plotSettingService.LoadPlotSettings();
+            _timeOffSetDays = Settings.TimeOffSet.Days;
+            _timeOffSetHours = Settings.TimeOffSet.Hours;
+            _timeOffSetMinutes = Settings.TimeOffSet.Minutes;
+            _timeOffSetSeconds = Settings.TimeOffSet.Seconds;
         }
 
 

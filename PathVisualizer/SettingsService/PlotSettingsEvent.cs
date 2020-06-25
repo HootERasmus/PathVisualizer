@@ -1,4 +1,5 @@
-﻿using Prism.Events;
+﻿using System;
+using Prism.Events;
 
 namespace SettingsService
 {
@@ -36,5 +37,7 @@ namespace SettingsService
 
         public string LineColor { get; set; }
         public string DotColor { get; set; }
+
+        public TimeSpan TimeOffSet { get; set; }
     }
 }

@@ -35,6 +35,22 @@
       <Value Profile="(Default)">Black</Value>
     </Setting>
 
+    <Setting Name="TimeOffSetDays" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+
+    <Setting Name="TimeOffSetHours" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+
+    <Setting Name="TimeOffSetMinutes" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+
+    <Setting Name="TimeOffSetSeconds" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+
   </Settings>
 
 </SettingsFile>

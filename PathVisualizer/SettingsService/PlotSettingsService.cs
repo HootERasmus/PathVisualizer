@@ -1,4 +1,5 @@
-﻿using Prism.Events;
+﻿using System;
+using Prism.Events;
 
 namespace SettingsService
 {
@@ -27,6 +28,11 @@ namespace SettingsService
             UserSettings.Default.LineColor = model.LineColor;
             UserSettings.Default.DotColor = model.DotColor;
 
+            UserSettings.Default.TimeOffSetDays = model.TimeOffSet.Days;
+            UserSettings.Default.TimeOffSetHours = model.TimeOffSet.Hours;
+            UserSettings.Default.TimeOffSetMinutes = model.TimeOffSet.Minutes;
+            UserSettings.Default.TimeOffSetSeconds = model.TimeOffSet.Seconds;
+
             UserSettings.Default.Save();
 
             _eventAggregator.GetEvent<PlotSettingsEvent>().Publish(model);
@@ -34,6 +40,8 @@ namespace SettingsService
 
         public PlotSettingsEventModel LoadPlotSettings()
         {
+            var timeOffSet = new TimeSpan(UserSettings.Default.TimeOffSetDays, UserSettings.Default.TimeOffSetHours, UserSettings.Default.TimeOffSetMinutes, UserSettings.Default.TimeOffSetSeconds);
+
             var model = new PlotSettingsEventModel
             {
                 XAxisTitle = UserSettings.Default.XAxisTitle,
@@ -44,7 +52,8 @@ namespace SettingsService
                 YAxisMaximum = UserSettings.Default.YAxisMaximum,
                 BackgroundImage = UserSettings.Default.BackgroundImagePath,
                 LineColor = UserSettings.Default.LineColor,
-                DotColor = UserSettings.Default.DotColor
+                DotColor = UserSettings.Default.DotColor,
+                TimeOffSet = timeOffSet
             };
 
             return model;

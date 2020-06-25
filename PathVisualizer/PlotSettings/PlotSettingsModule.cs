@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-using PlotSettings.Views;
+﻿using PlotSettings.Views;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
