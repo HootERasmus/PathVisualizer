@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.IO.Pipes;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,15 +64,25 @@ namespace TimePlayer.ViewModels
             }
         }
 
-        private string _speed;
-        public string Speed
+        private int _speed;
+        public int Speed
         {
-            get => _speed;
+            get
+            {
+                lock (_lock)
+                {
+                    return _speed;
+                }
+            }
             set
             {
                 if(value == Speed) return;
 
-                _speed = value;
+                lock (_lock)
+                {
+                    _speed = value;
+                }
+                
                 RaisePropertyChanged();
             }
         }
@@ -96,13 +105,13 @@ namespace TimePlayer.ViewModels
         public DelegateCommand FasterCommand { get; set; }
 
         public PlotModel MyPlotModel { get; set; }
-        //public PlotModel MyDotPlotModel { get; set; }
         public PlotSettingsEventModel Settings { get; set; }
         public Tag SelectedTag { get; set; }
         public ObservableCollection<PipelineCompletedEventModel> PipelineHistory { get; set; }
         private CancellationTokenSource _cts;
 
         private bool _isPlaying;
+        private readonly object _lock;
 
         private readonly IPlotModelHelper _plotModelHelper;
 
@@ -116,17 +125,14 @@ namespace TimePlayer.ViewModels
             FasterCommand = new DelegateCommand(FasterAction, CanPlay);
             PlayPauseText = "Play";
             _isPlaying = false;
+            _lock = new object();
+            Speed = 1;
 
             eventAggregator.GetEvent<PlotSettingsEvent>().Subscribe(ApplyPlotSettings);
             eventAggregator.GetEvent<PipelineCompletedEvent>().Subscribe(OnPipelineCompletedEvent);
 
             Settings = plotSettingService.LoadPlotSettings();
             ApplyPlotSettings(Settings);
-        }
-
-        private void SlowerAction()
-        {
-            
         }
 
         private void PlayPauseAction()
@@ -157,10 +163,10 @@ namespace TimePlayer.ViewModels
                 {
                     var scatterSeries = (ScatterSeries) MyPlotModel.Series.ElementAt(1);
 
-                    for (int i = 0; i < tag.TimeCoordinates.Count - 2; i++)
+                    for (int i = 0; i < tag.TimeCoordinates.Count - Speed - 1; i += Speed)
                     {
-                        var timeToWaitInSeconds = tag.TimeCoordinates[i+1].Timestamp - tag.TimeCoordinates[i].Timestamp;
-                        var timeToWaitInMiliSeconds = timeToWaitInSeconds * 1000;
+                        var timeToWaitInSeconds = tag.TimeCoordinates[i + 1].Timestamp - tag.TimeCoordinates[i].Timestamp;
+                        var timeToWaitInMilliseconds = timeToWaitInSeconds * 1000;
                         var timeCoordinate = tag.TimeCoordinates[i];
                         var newPoint = new ScatterPoint(timeCoordinate.X, timeCoordinate.Y);
                         
@@ -170,7 +176,7 @@ namespace TimePlayer.ViewModels
                         CurrentTimeValue = timeCoordinate.Timestamp;
 
                         token.ThrowIfCancellationRequested();
-                        Thread.Sleep((int)timeToWaitInMiliSeconds);
+                        Thread.Sleep((int)timeToWaitInMilliseconds);
                     }
 
                 }, token);
@@ -187,10 +193,21 @@ namespace TimePlayer.ViewModels
                 _cts.Cancel();
             
         }
+
+        private void SlowerAction()
+        {
+            if (Speed >= 1)
+                Speed = 1 * -1;
+            else
+                Speed *= 2;
+        }
         
         private void FasterAction()
         {
-
+            if (Speed < 1)
+                Speed = 1;
+            else
+                Speed *= 2;
         }
 
         private bool CanPlay()
@@ -221,8 +238,9 @@ namespace TimePlayer.ViewModels
 
         private async Task PlotLine(Tag tag)
         {
-            await _plotModelHelper.PlotTagOnLinePlotModel(MyPlotModel, SelectedTag, Settings);
-            MyPlotModel.Series.Add(new ScatterSeries());
+            await _plotModelHelper.PlotTagOnLinePlotModel(MyPlotModel, tag, Settings);
+            var color = Color.FromName(Settings.DotColor);
+            MyPlotModel.Series.Add(new ScatterSeries {MarkerFill = OxyColor.FromRgb(color.R, color.G, color.B), MarkerStroke = OxyColor.FromRgb(color.R, color.G, color.B) });
 
             RaisePropertyChanged(nameof(MyPlotModel));
             MyPlotModel.InvalidatePlot(true);
