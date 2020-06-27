@@ -22,6 +22,8 @@ namespace PlotModelService
 {
     public class PlotModelHelper : IPlotModelHelper
     {
+        private const string BackgroundTag = "Background";
+        private const string TextTag = "Text";
         private readonly object _lockObject;
 
         public PlotModelHelper()
@@ -35,8 +37,8 @@ namespace PlotModelService
             {
                 var color = Color.FromName(settings.LineColor);
                 model.Series.Clear();
-                model.Annotations.Clear();
-                model = ApplyLinePlotSettings(model, settings);
+                //model.Annotations.Clear();
+                //model = ApplyLinePlotSettings(model, settings);
 
                 var dataPoints = ConvertIntoDataPoints(tag.TimeCoordinates);
 
@@ -52,8 +54,8 @@ namespace PlotModelService
             return await Task.Run(() =>
             {
                 model.Series.Clear();
-                model.Annotations.Clear();
-                model = ApplyHeatMapPlotSettings(model, settings);
+                //model.Annotations.Clear();
+                //model = ApplyHeatMapPlotSettings(model, settings);
                 var dataPoints = ConvertIntoDataPoints(tag.TimeCoordinates, settings, 1);
 
                 var heatMapSeries = new HeatMapSeries
@@ -70,6 +72,20 @@ namespace PlotModelService
                 model.Series.Add(heatMapSeries);
                 return model;
             });
+        }
+
+        public async Task<PlotModel> ClearTextAnnotations(PlotModel model)
+        {
+            return await Task.Run(() =>
+            {
+                var annotations = model.Annotations.Where(x => (string) x.Tag == TextTag).ToList();
+                foreach (var annotation in annotations)
+                {
+                    model.Annotations.Remove(annotation);
+                }
+                return model;
+            });
+
         }
 
         public async Task<PlotModel> AddLineSeriesToPlot(PlotModel model, List<DataPoint> dataPoints, string lineColor, string textAnnotation = "")
@@ -90,7 +106,8 @@ namespace PlotModelService
                     Background = OxyColor.FromRgb(255,255,255),
                     Text = textAnnotation,
                     TextColor = OxyColor.FromRgb(0,0,0),
-                    TextPosition = new DataPoint(xAvg, yAvg)
+                    TextPosition = new DataPoint(xAvg, yAvg),
+                    Tag = TextTag
                 };
                 model.Annotations.Add(annotation);
                 return model;
@@ -101,6 +118,9 @@ namespace PlotModelService
         {
             lock (_lockObject)
             {
+                model.Axes.Clear();
+                model.Annotations.Clear();
+
                 model.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = settings.XAxisTitle, Minimum = settings.XAxisMinimum, Maximum = settings.XAxisMaximum });
                 model.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = settings.YAxisTitle, Minimum = settings.YAxisMinimum, Maximum = settings.YAxisMaximum });
 
@@ -121,7 +141,8 @@ namespace PlotModelService
                     Layer = AnnotationLayer.BelowSeries,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Middle,
-                    Interpolate = true
+                    Interpolate = true,
+                    Tag = BackgroundTag
                 };
                 model.Annotations.Add(imageAnnotation);
                 return model;
@@ -133,6 +154,9 @@ namespace PlotModelService
         {
             lock (_lockObject)
             {
+                model.Annotations.Clear();
+                model.Axes.Clear();
+
                 // Color axis (the X and Y axes are generated automatically)
                 model.Axes.Add(new LinearColorAxis {Position = AxisPosition.Right, Palette = OxyPalettes.Jet(100)});
                 model.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = settings.XAxisTitle, Minimum = settings.XAxisMinimum, Maximum = settings.XAxisMaximum });
@@ -155,7 +179,8 @@ namespace PlotModelService
                     Layer = AnnotationLayer.AboveSeries,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Middle,
-                    Interpolate = true
+                    Interpolate = true,
+                    Tag = BackgroundTag
                 };
                 model.Annotations.Add(imageAnnotation);
                 return model;

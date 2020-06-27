@@ -56,7 +56,6 @@ namespace ZonePlot.ViewModels
 
         private void RemoveZoneAction()
         {
-            
             _lastSelectedZone.PointsInText = string.Empty;
             _eventAggregator.GetEvent<ZoneChangeEvent>().Publish(_lastSelectedZone);
             Zones.Remove(_lastSelectedZone);

@@ -64,12 +64,12 @@ namespace ZonePlot.Models
         
         public Zone(IEventAggregator eventAggregator, string pointsInText = "", string textAnnotation = "", string selectedColor = "Red", Guid zoneId = default)
         {
+            ZoneId = zoneId == default ? Guid.NewGuid() : zoneId;
+
             _eventAggregator = eventAggregator;
             _pointsInText = pointsInText;
             SelectedColor = selectedColor;
             TextAnnotation = textAnnotation;
-
-            ZoneId = zoneId == default ? Guid.NewGuid() : zoneId;
 
             Colors = new ObservableCollection<string>();
 

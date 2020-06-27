@@ -83,12 +83,13 @@ namespace ZonePlot.ViewModels
             SelectedTag = tag;
 
             MyPlotModel = await _plotModelHelper.PlotTagOnLinePlotModel(MyPlotModel, SelectedTag, Settings);
+            MyPlotModel = await _plotModelHelper.ClearTextAnnotations(MyPlotModel);
+
             foreach (var zone in zones)
             {
                 MyPlotModel = await _plotModelHelper.AddLineSeriesToPlot(MyPlotModel, zone.Points, zone.SelectedColor, zone.TextAnnotation);
             }
             
-
             RaisePropertyChanged(nameof(MyPlotModel));
             MyPlotModel.InvalidatePlot(true);
         }
@@ -139,7 +140,7 @@ namespace ZonePlot.ViewModels
             for (int i = 0; i < _pointsInsideZones.Count; i++)
             {
 
-                PointsInZones.Add($"Zone {i} - {_pointsInsideZones[i]}");
+                PointsInZones.Add($"{_zones[i].TextAnnotation} - {_pointsInsideZones[i]}");
             }
         }
     }
