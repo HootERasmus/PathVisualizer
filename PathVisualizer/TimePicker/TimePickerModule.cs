@@ -14,7 +14,7 @@ namespace TimePicker
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<TimePickerView>();
+            
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

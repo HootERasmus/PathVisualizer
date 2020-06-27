@@ -17,10 +17,6 @@ namespace LinePlot
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<LinePlotView>();
-            containerProvider.Resolve<BannerNavigationView>();
-            containerProvider.Resolve<MenuFileExportView>();
-            containerProvider.Resolve<MenuFileExportMultiLinePlotView>();
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

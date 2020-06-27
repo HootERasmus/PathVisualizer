@@ -15,8 +15,7 @@ namespace TimePlayer
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<BannerNavigationView>();
-            containerProvider.Resolve<TimePlayerView>();
+           
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

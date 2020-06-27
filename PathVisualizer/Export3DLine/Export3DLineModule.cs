@@ -14,7 +14,6 @@ namespace Export3DLine
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<Export3DLineView>();
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

@@ -82,14 +82,12 @@ namespace ZonePlot.ViewModels
         {
             SelectedTag = tag;
 
-            var zonesInListFormat = new List<List<DataPoint>>();
-
+            MyPlotModel = await _plotModelHelper.PlotTagOnLinePlotModel(MyPlotModel, SelectedTag, Settings);
             foreach (var zone in zones)
             {
-                zonesInListFormat.Add(zone.Points);
+                MyPlotModel = await _plotModelHelper.AddLineSeriesToPlot(MyPlotModel, zone.Points, zone.SelectedColor, zone.TextAnnotation);
             }
-
-            await _plotModelHelper.PlotTagAndZonesOnLinePlotModel(MyPlotModel, SelectedTag, zonesInListFormat, Settings);
+            
 
             RaisePropertyChanged(nameof(MyPlotModel));
             MyPlotModel.InvalidatePlot(true);

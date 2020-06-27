@@ -14,7 +14,7 @@ namespace PlotSettings
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<MenuViewPlotSettingsView>();
+            
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

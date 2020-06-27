@@ -11,7 +11,7 @@ namespace ZonePlot.ViewModels
     public class ManageZonesViewModel : BindableBase
     {
         public ObservableCollection<Zone> Zones { get; set; }
-
+        
         public DelegateCommand AddZoneCommand { get; set; }
         public DelegateCommand RemoveZoneCommand { get; set; }
         public DelegateCommand ClosingCommand { get; set; }

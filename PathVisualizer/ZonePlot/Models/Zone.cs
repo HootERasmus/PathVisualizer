@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using OxyPlot;
 using Prism.Events;
 using Prism.Mvvm;
@@ -11,30 +14,70 @@ namespace ZonePlot.Models
 {
     public class Zone : BindableBase
     {
-        private readonly IEventAggregator _eventAggregator;
-        
-        public Zone(IEventAggregator eventAggregator, string pointsInText = "", Guid zoneId = default)
-        {
-            _eventAggregator = eventAggregator;
-            _pointsInText = pointsInText;
-
-            ZoneId = zoneId == default ? Guid.NewGuid() : zoneId;
-        }
-
-        public Guid ZoneId { get; }
-        public List<DataPoint> Points => TextIntoDataPoints();
-
         private string _pointsInText;
         public string PointsInText
         {
             get => _pointsInText;
             set
             {
-                if(value == PointsInText) return;
+                if (value == PointsInText) return;
 
                 _pointsInText = value;
                 RaisePropertyChanged();
                 _eventAggregator.GetEvent<ZoneChangeEvent>().Publish(this);
+            }
+        }
+
+        public ObservableCollection<string> Colors { get; set; }
+        public Guid ZoneId { get; }
+        public List<DataPoint> Points => TextIntoDataPoints();
+
+        private string _textAnnotation;
+        public string TextAnnotation
+        {
+            get => _textAnnotation;
+            set
+            {
+                if(value == TextAnnotation) return;
+
+                _textAnnotation = value;
+                RaisePropertyChanged();
+                _eventAggregator.GetEvent<ZoneChangeEvent>().Publish(this);
+            }
+        }
+
+        private string _selectedColor;
+        public string SelectedColor
+        {
+            get => _selectedColor;
+            set
+            {
+                if(value == SelectedColor) return;
+
+                _selectedColor = value;
+                RaisePropertyChanged();
+                _eventAggregator.GetEvent<ZoneChangeEvent>().Publish(this);
+            }
+        }
+        
+        private readonly IEventAggregator _eventAggregator;
+        
+        public Zone(IEventAggregator eventAggregator, string pointsInText = "", string textAnnotation = "", string selectedColor = "Red", Guid zoneId = default)
+        {
+            _eventAggregator = eventAggregator;
+            _pointsInText = pointsInText;
+            SelectedColor = selectedColor;
+            TextAnnotation = textAnnotation;
+
+            ZoneId = zoneId == default ? Guid.NewGuid() : zoneId;
+
+            Colors = new ObservableCollection<string>();
+
+            var colorType = typeof(Color);
+            var propInfoList = colorType.GetProperties(BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.Public);
+            foreach (var c in propInfoList)
+            {
+                Colors.Add(c.Name);
             }
         }
 

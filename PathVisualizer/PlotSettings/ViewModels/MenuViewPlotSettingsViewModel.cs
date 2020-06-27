@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using PlotSettings.Views;
+﻿using PlotSettings.Views;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;

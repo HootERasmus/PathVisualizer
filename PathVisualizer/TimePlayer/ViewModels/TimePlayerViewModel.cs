@@ -247,7 +247,8 @@ namespace TimePlayer.ViewModels
 
         private void CalculateTime(Tag tag)
         {
-            
+            if(!tag.TimeCoordinates.Any()) return;
+
             MaximumTimeValue = tag.TimeCoordinates.Max(x => x.Timestamp);
             MinimumTimeValue = tag.TimeCoordinates.Min(x => x.Timestamp);
             CurrentTimeValue = MinimumTimeValue;

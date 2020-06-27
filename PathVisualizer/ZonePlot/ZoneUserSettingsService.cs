@@ -15,7 +15,7 @@ namespace ZonePlot
 
             foreach (var zone in zones)
             {
-                sb.Append($"{zone.ZoneId}]{zone.PointsInText}|");
+                sb.Append($"{zone.PointsInText}]{zone.TextAnnotation}]{zone.SelectedColor}]{zone.ZoneId}|");
             }
 
             if (sb.Length != 0)
@@ -39,9 +39,7 @@ namespace ZonePlot
             {
                 var items = item.Split(']');
 
-                zones.Add(Guid.TryParse(items[0], out var guid)
-                    ? new Zone(eventAggregator, items[1], guid)
-                    : new Zone(eventAggregator, items[0]));
+                zones.Add(new Zone(eventAggregator, items[0], items[1], items[2], Guid.Parse(items[3])));
             }
 
             return zones;

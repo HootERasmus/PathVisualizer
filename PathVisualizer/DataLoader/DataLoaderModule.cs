@@ -14,7 +14,7 @@ namespace DataLoader
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<MenuFileOpenView>();
+            
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

@@ -18,10 +18,7 @@ namespace HeatMapPlot
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<BannerNavigationView>();
-            containerProvider.Resolve<HeatMapPlotView>();
-            containerProvider.Resolve<MenuFileExportHeatMapPlotView>();
-            containerProvider.Resolve<MenuFileExportMultiHeatMapPlotViewModel>();
+            
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

@@ -16,9 +16,7 @@ namespace ZonePlot
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<ZonePlotView>();
-            containerProvider.Resolve<BannerNavigationView>();
-            containerProvider.Resolve<MenuToolZoneView>();
+            
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

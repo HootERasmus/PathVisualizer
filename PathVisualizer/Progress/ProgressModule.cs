@@ -14,7 +14,7 @@ namespace Progress
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<ProgressView>();
+            
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

@@ -14,7 +14,7 @@ namespace DataPanel
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<DataGridView>();
+            
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

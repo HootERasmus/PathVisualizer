@@ -14,7 +14,6 @@ namespace Filters
 
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            containerProvider.Resolve<MenuToolFilterView>();
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

@@ -1,10 +1,11 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
 
 namespace Lib.SharedModels
 {
     public class Line
     {
-        public Point From { get; set; }
-        public Point To { get; set; }
+        public IList<TimeCoordinate> Points { get; set; }
+        public string TextAnnotation { get; set; }
+        public string Color { get; set; }
     }
 }

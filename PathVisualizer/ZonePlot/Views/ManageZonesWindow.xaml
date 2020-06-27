@@ -7,8 +7,9 @@
         xmlns:local="clr-namespace:ZonePlot.Views"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:interactivity="http://prismlibrary.com/"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
-        Title="ManageZonesWindow" Height="450" Width="300">
+        Title="ManageZonesWindow" Height="450" Width="500">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
@@ -17,9 +18,28 @@
     </i:Interaction.Triggers>
 
     <Window.Resources>
-        <DataTemplate x:Key="ShowFilter" DataType="models:Zone">
-            <TextBox  Text="{Binding PointsInText, UpdateSourceTrigger=PropertyChanged}" Width="279"/>
+        <DataTemplate x:Key="ShowColor" DataType="system:String">
+            <StackPanel Orientation="Horizontal">
+                <Rectangle Fill="{Binding }" Width="16" Height="16" Margin="0 2 5 2" />
+                <TextBlock Text="{Binding }" />
+            </StackPanel>
         </DataTemplate>
+
+        <DataTemplate x:Key="ShowFilter" DataType="models:Zone">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding TextAnnotation, UpdateSourceTrigger=PropertyChanged}" Margin="5,0" Width="100" Grid.Column="0"/>
+                <ComboBox ItemsSource="{Binding Colors}" SelectedItem="{Binding SelectedColor, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource ShowColor}" HorizontalAlignment="Left" Margin="5,0" Width="120" Grid.Column="1"/>
+                <TextBox  Text="{Binding PointsInText, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Margin="5,0" Grid.Column="2"/>
+            </Grid>
+        </DataTemplate>
+        <Style TargetType="ListViewItem" x:Key="ListViewItemStyle">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -27,7 +47,7 @@
             <RowDefinition Height="187*"/>
             <RowDefinition Height="55"/>
         </Grid.RowDefinitions>
-        <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding Zones}" SelectedItem="{Binding SelectedZone}" ItemTemplate="{StaticResource ShowFilter}">
+        <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding Zones}" SelectedItem="{Binding SelectedZone}" ItemTemplate="{StaticResource ShowFilter}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
             <ListView.Resources>
                 <Style TargetType="ListViewItem">
                     <Style.Triggers>
