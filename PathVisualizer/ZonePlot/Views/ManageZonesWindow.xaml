@@ -39,6 +39,11 @@
         </DataTemplate>
         <Style TargetType="ListViewItem" x:Key="ListViewItemStyle">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="IsSelected" Value="True"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
 
@@ -47,17 +52,7 @@
             <RowDefinition Height="187*"/>
             <RowDefinition Height="55"/>
         </Grid.RowDefinitions>
-        <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding Zones}" SelectedItem="{Binding SelectedZone}" ItemTemplate="{StaticResource ShowFilter}" ItemContainerStyle="{StaticResource ListViewItemStyle}">
-            <ListView.Resources>
-                <Style TargetType="ListViewItem">
-                    <Style.Triggers>
-                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                            <Setter Property="IsSelected" Value="True"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.Resources>
-        </ListView>
+        <ListView HorizontalAlignment="Stretch" ItemsSource="{Binding Zones}" SelectedItem="{Binding SelectedZone}" ItemTemplate="{StaticResource ShowFilter}" ItemContainerStyle="{StaticResource ListViewItemStyle}"/>
         <Border Background="AliceBlue" Grid.Column="0" Grid.Row="1" Margin="0,2,0,0"/>
         <Button Content="+" FontWeight="Bold" Command="{Binding AddZoneCommand}" FontFamily="Areal" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"  FontSize="25" Height="35" Width="35" Grid.Row="1"/>
         <Button Content="-" FontWeight="Bold" Command="{Binding RemoveZoneCommand}" FontFamily="Areal" HorizontalAlignment="Left" Margin="55,10,0,0" VerticalAlignment="Top"  FontSize="25" Height="35" Width="35" Grid.Row="1"/>
