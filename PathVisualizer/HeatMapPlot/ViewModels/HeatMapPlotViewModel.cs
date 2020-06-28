@@ -57,7 +57,7 @@ namespace HeatMapPlot.ViewModels
             }
 
             if (history.Any())
-                await PlotHeatMap(history.Last().Tag);
+                await PlotHeatMap(history.First().Tag);
         }
 
         private async Task PlotHeatMap(Tag tag)

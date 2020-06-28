@@ -37,9 +37,7 @@ namespace PlotModelService
             {
                 var color = Color.FromName(settings.LineColor);
                 model.Series.Clear();
-                //model.Annotations.Clear();
-                //model = ApplyLinePlotSettings(model, settings);
-
+                
                 var dataPoints = ConvertIntoDataPoints(tag.TimeCoordinates);
 
                 model.Series.Add(new LineSeries { Title = tag.Id, ItemsSource = dataPoints, Color = OxyColor.FromRgb(color.R, color.G, color.B) });
@@ -54,9 +52,8 @@ namespace PlotModelService
             return await Task.Run(() =>
             {
                 model.Series.Clear();
-                //model.Annotations.Clear();
-                //model = ApplyHeatMapPlotSettings(model, settings);
                 var dataPoints = ConvertIntoDataPoints(tag.TimeCoordinates, settings, 1);
+                var logPoints = ConvertIntoLogScale(dataPoints, settings, 1);
 
                 var heatMapSeries = new HeatMapSeries
                 {
@@ -66,7 +63,7 @@ namespace PlotModelService
                     Y1 = settings.YAxisMaximum,
                     Interpolate = true,
                     RenderMethod = HeatMapRenderMethod.Bitmap,
-                    Data = dataPoints
+                    Data = logPoints
                 };
 
                 model.Series.Add(heatMapSeries);
@@ -193,7 +190,7 @@ namespace PlotModelService
             exporter.ExportToFile(model, path);
         }
 
-        private double[,] ConvertIntoDataPoints(IList<TimeCoordinate> timeCoordinates, PlotSettingsEventModel settings, int squareSize)
+        private double[,] ConvertIntoDataPoints(IList<TimeCoordinate> timeCoordinates, PlotSettingsEventModel settings, int squareSize, int maxCap = Int32.MaxValue)
         {
             var points = new double[((int)settings.XAxisMaximum - (int)settings.XAxisMinimum) / squareSize, ((int)settings.YAxisMaximum - (int)settings.YAxisMinimum) / squareSize];
             var xOffSet = (int)Math.Abs(settings.XAxisMinimum);
@@ -205,7 +202,7 @@ namespace PlotModelService
 
                 try
                 {
-                    if (points[x, y] < 10)
+                    if (points[x, y] < maxCap)
                         points[x, y]++;
                 }
                 catch (Exception e)
@@ -214,6 +211,25 @@ namespace PlotModelService
                 }
             }
             return points;
+        }
+
+        private double[,] ConvertIntoLogScale(double[,] map, PlotSettingsEventModel settings, int squareSize)
+        {
+            var xLength = ((int) settings.XAxisMaximum - (int) settings.XAxisMinimum) / squareSize;
+            var yLength = ((int) settings.YAxisMaximum - (int) settings.YAxisMinimum) / squareSize;
+            var logScale = new double[xLength, yLength];
+            
+            for (int i = 0; i < xLength - 1; i++)
+            {
+                for (int j = 0; j < yLength - 1; j++)
+                {
+                    var value = map[i, j] + 1;
+                    var logValue = Math.Log(value);
+                    logScale[i, j] = logValue;
+                }
+            }
+
+            return logScale;
         }
 
         private List<DataPoint> ConvertIntoDataPoints(IList<TimeCoordinate> timeCoordinates)

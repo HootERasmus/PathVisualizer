@@ -162,8 +162,9 @@ namespace TimePlayer.ViewModels
                 await Task.Run(() =>
                 {
                     var scatterSeries = (ScatterSeries) MyPlotModel.Series.ElementAt(1);
-
-                    for (int i = 0; i < tag.TimeCoordinates.Count - Speed - 1; i += Speed)
+                    var startTimestamp = tag.TimeCoordinates.First(x => Math.Abs(x.Timestamp - CurrentTimeValue) < 1);
+                    var startIndex = tag.TimeCoordinates.IndexOf(startTimestamp);
+                    for (int i = startIndex; i < tag.TimeCoordinates.Count - Speed - 1; i += Speed)
                     {
                         var timeToWaitInSeconds = tag.TimeCoordinates[i + 1].Timestamp - tag.TimeCoordinates[i].Timestamp;
                         var timeToWaitInMilliseconds = timeToWaitInSeconds * 1000;
