@@ -30,9 +30,6 @@ namespace DataLoaderService
             {
                 if (fileNames.Any(fileName => !File.Exists(fileName))) return new List<Tag>();
 
-                _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, fileNames.Length, 0));
-                var count = 0;
-
                 Tags.Clear();
                 try
                 {
@@ -43,15 +40,12 @@ namespace DataLoaderService
                         var format = read[0].Split(',');
                         if (format.Length > 4)
                         {
-                            DataLoadOldFormat(read);
+                            Progress(DataLoadOldFormat, read, read.Length);
                         }
                         else
                         {
-                            DataLoadNewFormat(read);
+                            Progress(DataLoadNewFormat, read, read.Length);
                         }
-
-                        _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, fileNames.Length, ++count));
-                        
                     }
 
                 }
@@ -68,45 +62,64 @@ namespace DataLoaderService
 
         private void DataLoadOldFormat(string[] oldFormat)
         {
-            foreach (var line in oldFormat)
+            var id = oldFormat[1];
+            var x = double.Parse(oldFormat[2], CultureInfo.InvariantCulture);
+            var y = double.Parse(oldFormat[3], CultureInfo.InvariantCulture);
+            var z = double.Parse(oldFormat[4], CultureInfo.InvariantCulture);
+            var batteryPower = oldFormat[5];
+            var timestamp = double.Parse(oldFormat[6], CultureInfo.InvariantCulture);
+            var unit = oldFormat[7];
+            var dqi = oldFormat[8];
+
+            if (Tags.All(tag => tag.Id != id))
             {
-                var strings = line.Split(',');
-
-                var id = strings[1];
-                var x = double.Parse(strings[2], CultureInfo.InvariantCulture);
-                var y = double.Parse(strings[3], CultureInfo.InvariantCulture);
-                var z = double.Parse(strings[4], CultureInfo.InvariantCulture);
-                var batteryPower = strings[5];
-                var timestamp = double.Parse(strings[6], CultureInfo.InvariantCulture);
-                var unit = strings[7];
-                var dqi = strings[8];
-
-                if (Tags.All(tag => tag.Id != id))
-                {
-                    Tags.Add(new Tag(id, new List<ITimeCoordinate>()));
-                }
-
-                Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new UwbTimeCoordinate(x, y, z, batteryPower, timestamp, unit, dqi));
+                Tags.Add(new Tag(id, new List<ITimeCoordinate>()));
             }
+
+            Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new UwbTimeCoordinate(x, y, z, batteryPower, timestamp, unit, dqi));
         }
 
         private void DataLoadNewFormat(string[] newFormat)
         {
-            foreach (var line in newFormat)
-            {
-                var strings = line.Split(',');
+            var id = newFormat[0];
+            var x = double.Parse(newFormat[1], CultureInfo.InvariantCulture);
+            var y = double.Parse(newFormat[2], CultureInfo.InvariantCulture);
+            var timestamp = DateTime.Parse(newFormat[3], CultureInfo.InvariantCulture);
 
-                var id = strings[0];
-                var x = double.Parse(strings[1], CultureInfo.InvariantCulture);
-                var y = double.Parse(strings[2], CultureInfo.InvariantCulture);
-                var timestamp = DateTime.Parse(strings[3], CultureInfo.InvariantCulture);
-                
-                if (Tags.All(tag => tag.Id != id))
+            if (Tags.All(tag => tag.Id != id))
+            {
+                Tags.Add(new Tag(id, new List<ITimeCoordinate>()));
+            }
+
+            Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new TimeCoordinate(x, y, timestamp));
+           
+        }
+
+        private void Progress(Action<string[]> action, string[] lines, int length)
+        {
+            var count = 1;
+            var percentCount = 0;
+            var percent = length / 100;
+            _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, 100, 0));
+
+            foreach (var line in lines)
+            {
+                try
                 {
-                    Tags.Add(new Tag(id, new List<ITimeCoordinate>()));
+                    var splitLine = line.Split(',');
+                    action.Invoke(splitLine);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
+                finally
+                {
+                    count++;
                 }
 
-                Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new TimeCoordinate(x, y, timestamp));
+                if (count % percent == 0)
+                    _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, 100, ++percentCount));
             }
         }
     }
