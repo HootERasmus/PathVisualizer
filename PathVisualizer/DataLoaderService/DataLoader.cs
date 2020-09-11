@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Lib;
 using Lib.Events;
 using Lib.SharedModels;
+using Lib.SharedModels.TimeModels;
 using Prism.Events;
 
 namespace DataLoaderService
@@ -85,7 +86,7 @@ namespace DataLoaderService
                     Tags.Add(new Tag(id, new List<ITimeCoordinate>()));
                 }
 
-                Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new TimeCoordinate(x, y, z, batteryPower, timestamp, unit, dqi));
+                Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new UwbTimeCoordinate(x, y, z, batteryPower, timestamp, unit, dqi));
             }
         }
 
@@ -105,7 +106,7 @@ namespace DataLoaderService
                     Tags.Add(new Tag(id, new List<ITimeCoordinate>()));
                 }
 
-                Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new NewTimeCoordinate(x, y, timestamp));
+                Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new TimeCoordinate(x, y, timestamp));
             }
         }
     }

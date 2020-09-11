@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lib.SharedModels
+namespace Lib.SharedModels.TimeModels
 {
     public interface ITimeCoordinate
     {

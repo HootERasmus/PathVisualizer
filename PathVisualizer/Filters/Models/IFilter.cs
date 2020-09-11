@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lib.SharedModels;
+using Lib.SharedModels.TimeModels;
 
 namespace Filters.Models
 {

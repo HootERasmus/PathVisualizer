@@ -9,6 +9,7 @@ using Filters.Models;
 using Filters.Views;
 using Lib.Events;
 using Lib.SharedModels;
+using Lib.SharedModels.TimeModels;
 using PipelineService;
 using Prism.Commands;
 using Prism.Events;

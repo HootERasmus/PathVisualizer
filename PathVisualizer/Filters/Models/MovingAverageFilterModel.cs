@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Lib.SharedModels;
+using Lib.SharedModels.TimeModels;
 
 namespace Filters.Models
 {
@@ -37,7 +38,7 @@ namespace Filters.Models
                         maX += bufferX[j];
                         maY += bufferY[j];
                     }
-                    movingAverage.Add(new NewTimeCoordinate(maX, maY, point.Timestamp));
+                    movingAverage.Add(new TimeCoordinate(maX, maY, point.Timestamp));
                     currentIndex = (currentIndex + 1) % Period;
                 }
             });

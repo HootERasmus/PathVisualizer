@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Lib.SharedModels;
+using Lib.SharedModels.TimeModels;
 
 namespace Filters.Models
 {
@@ -29,7 +30,7 @@ namespace Filters.Models
 
                 foreach (var timeCoordinate in originalData)
                 {
-                    var newPoint = new NewTimeCoordinate(
+                    var newPoint = new TimeCoordinate(
                         timeCoordinate.X,
                         timeCoordinate.Y,
                         timeCoordinate.Timestamp

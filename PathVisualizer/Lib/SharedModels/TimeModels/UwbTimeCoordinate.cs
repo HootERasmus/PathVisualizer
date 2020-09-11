@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Lib.SharedModels
+namespace Lib.SharedModels.TimeModels
 {
-    public class TimeCoordinate : ITimeCoordinate
+    public class UwbTimeCoordinate : ITimeCoordinate
     {
-        public TimeCoordinate(double x, double y, double z, string batteryPower, double timestamp, string unit, string dqi)
+        public UwbTimeCoordinate(double x, double y, double z, string batteryPower, double timestamp, string unit, string dqi)
         {
             X = x;
             Y = y;
