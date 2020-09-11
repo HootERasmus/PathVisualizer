@@ -6,7 +6,7 @@ namespace Filters.Models
 {
     public interface IFilter
     {
-        public Task<List<TimeCoordinate>> Filter(List<TimeCoordinate> originalData);
+        public Task<List<ITimeCoordinate>> Filter(List<ITimeCoordinate> originalData);
         public string Name { get; }
     }
 }

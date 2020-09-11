@@ -1,6 +1,8 @@
-﻿namespace Lib.SharedModels
+﻿using System;
+
+namespace Lib.SharedModels
 {
-    public class TimeCoordinate
+    public class TimeCoordinate : ITimeCoordinate
     {
         public TimeCoordinate(double x, double y, double z, string batteryPower, double timestamp, string unit, string dqi)
         {
@@ -8,7 +10,8 @@
             Y = y;
             Z = z;
             BatteryPower = batteryPower;
-            Timestamp = timestamp;
+            EpochTimestamp = timestamp;
+            Timestamp = FromUnixTime(timestamp);
             Unit = unit;
             DQI = dqi;
         }
@@ -17,8 +20,15 @@
         public double Y { get; }
         public double Z { get; }
         public string BatteryPower { get; }
-        public double Timestamp { get; }
+        public double EpochTimestamp { get; }
+        public DateTime Timestamp { get; }
         public string Unit { get; }
         public string DQI { get; }
+
+        private DateTime FromUnixTime(double unixTime)
+        {
+            return _epoch.AddSeconds(unixTime);
+        }
+        private readonly DateTime _epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
     }
 }

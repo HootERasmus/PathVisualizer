@@ -18,9 +18,9 @@ namespace Filters.Models
             ErrorSpike = 1;
         }
 
-        public async Task<List<TimeCoordinate>> Filter(List<TimeCoordinate> originalData)
+        public async Task<List<ITimeCoordinate>> Filter(List<ITimeCoordinate> originalData)
         {
-            var lines = new List<TimeCoordinate>();
+            var lines = new List<ITimeCoordinate>();
 
             await Task.Run(() =>
             {
@@ -29,14 +29,11 @@ namespace Filters.Models
 
                 foreach (var timeCoordinate in originalData)
                 {
-                    var newPoint = new TimeCoordinate(
+                    var newPoint = new NewTimeCoordinate(
                         timeCoordinate.X,
                         timeCoordinate.Y,
-                        timeCoordinate.Z,
-                        timeCoordinate.BatteryPower,
-                        timeCoordinate.Timestamp,
-                        timeCoordinate.Unit,
-                        timeCoordinate.DQI);
+                        timeCoordinate.Timestamp
+                        );
 
                     if (!lines.Any())
                         lines.Add(newPoint);
@@ -56,12 +53,12 @@ namespace Filters.Models
 
         }
 
-        private bool IsErrorSpike(TimeCoordinate first, TimeCoordinate second, int numberOfErrors, double errorThreshold)
+        private bool IsErrorSpike(ITimeCoordinate first, ITimeCoordinate second, int numberOfErrors, double errorThreshold)
         {
             return Euclidean(first, second) > errorThreshold * (numberOfErrors + 1);
         }
 
-        public double Euclidean(TimeCoordinate first, TimeCoordinate second)
+        public double Euclidean(ITimeCoordinate first, ITimeCoordinate second)
         {
             return Math.Sqrt(Math.Pow(first.X - second.X, 2) + Math.Pow(first.Y - second.Y, 2));
         }

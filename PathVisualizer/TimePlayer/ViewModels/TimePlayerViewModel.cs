@@ -162,11 +162,11 @@ namespace TimePlayer.ViewModels
                 await Task.Run(() =>
                 {
                     var scatterSeries = (ScatterSeries) MyPlotModel.Series.ElementAt(1);
-                    var startTimestamp = tag.TimeCoordinates.First(x => Math.Abs(x.Timestamp - CurrentTimeValue) < 1);
+                    var startTimestamp = tag.TimeCoordinates.First(x => Math.Abs(x.EpochTimestamp - CurrentTimeValue) < 1);
                     var startIndex = tag.TimeCoordinates.IndexOf(startTimestamp);
                     for (int i = startIndex; i < tag.TimeCoordinates.Count - Speed - 1; i += Speed)
                     {
-                        var timeToWaitInSeconds = tag.TimeCoordinates[i + 1].Timestamp - tag.TimeCoordinates[i].Timestamp;
+                        var timeToWaitInSeconds = tag.TimeCoordinates[i + 1].EpochTimestamp - tag.TimeCoordinates[i].EpochTimestamp;
                         var timeToWaitInMilliseconds = timeToWaitInSeconds * 1000;
                         var timeCoordinate = tag.TimeCoordinates[i];
                         var newPoint = new ScatterPoint(timeCoordinate.X, timeCoordinate.Y);
@@ -174,7 +174,7 @@ namespace TimePlayer.ViewModels
                         scatterSeries.Points.Clear();
                         scatterSeries.Points.Add(newPoint);
                         MyPlotModel.InvalidatePlot(true);
-                        CurrentTimeValue = timeCoordinate.Timestamp;
+                        CurrentTimeValue = timeCoordinate.EpochTimestamp;
 
                         token.ThrowIfCancellationRequested();
                         Thread.Sleep((int)timeToWaitInMilliseconds);
@@ -268,8 +268,8 @@ namespace TimePlayer.ViewModels
         {
             if(!tag.TimeCoordinates.Any()) return;
 
-            MaximumTimeValue = tag.TimeCoordinates.Max(x => x.Timestamp);
-            MinimumTimeValue = tag.TimeCoordinates.Min(x => x.Timestamp);
+            MaximumTimeValue = tag.TimeCoordinates.Max(x => x.EpochTimestamp);
+            MinimumTimeValue = tag.TimeCoordinates.Min(x => x.EpochTimestamp);
             CurrentTimeValue = MinimumTimeValue;
         }
 

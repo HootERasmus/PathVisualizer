@@ -190,7 +190,7 @@ namespace PlotModelService
             exporter.ExportToFile(model, path);
         }
 
-        private double[,] ConvertIntoDataPoints(IList<TimeCoordinate> timeCoordinates, PlotSettingsEventModel settings, int squareSize, int maxCap = Int32.MaxValue)
+        private double[,] ConvertIntoDataPoints(IList<ITimeCoordinate> timeCoordinates, PlotSettingsEventModel settings, int squareSize, int maxCap = Int32.MaxValue)
         {
             var points = new double[((int)settings.XAxisMaximum - (int)settings.XAxisMinimum) / squareSize, ((int)settings.YAxisMaximum - (int)settings.YAxisMinimum) / squareSize];
             var xOffSet = (int)Math.Abs(settings.XAxisMinimum);
@@ -232,7 +232,7 @@ namespace PlotModelService
             return logScale;
         }
 
-        private List<DataPoint> ConvertIntoDataPoints(IList<TimeCoordinate> timeCoordinates)
+        private List<DataPoint> ConvertIntoDataPoints(IList<ITimeCoordinate> timeCoordinates)
         {
             var points = new List<DataPoint>();
 

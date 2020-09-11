@@ -39,27 +39,18 @@ namespace DataLoaderService
                     {
                         var read = File.ReadAllLines(fileName);
 
-                        foreach (var line in read)
+                        var format = read[0].Split(',');
+                        if (format.Length > 4)
                         {
-                            var strings = line.Split(',');
-
-                            var id = strings[1];
-                            var x = double.Parse(strings[2], CultureInfo.InvariantCulture);
-                            var y = double.Parse(strings[3], CultureInfo.InvariantCulture);
-                            var z = double.Parse(strings[4], CultureInfo.InvariantCulture);
-                            var batteryPower = strings[5];
-                            var timestamp = double.Parse(strings[6], CultureInfo.InvariantCulture);
-                            var unit = strings[7];
-                            var dqi = strings[8];
-
-                            if (Tags.All(tag => tag.Id != id))
-                            {
-                                Tags.Add(new Tag(id, new List<TimeCoordinate>()));
-                            }
-                            Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new TimeCoordinate(x, y, z, batteryPower, timestamp, unit, dqi));
+                            DataLoadOldFormat(read);
+                        }
+                        else
+                        {
+                            DataLoadNewFormat(read);
                         }
 
                         _eventAggregator.GetEvent<ProgressEvent>().Publish(new ProgressEventModel(0, fileNames.Length, ++count));
+                        
                     }
 
                 }
@@ -72,6 +63,50 @@ namespace DataLoaderService
                 _eventAggregator.GetEvent<DataEvent>().Publish(new DataEventModel(Tags, TagEventType.Loaded));
                 return Tags;
             });
+        }
+
+        private void DataLoadOldFormat(string[] oldFormat)
+        {
+            foreach (var line in oldFormat)
+            {
+                var strings = line.Split(',');
+
+                var id = strings[1];
+                var x = double.Parse(strings[2], CultureInfo.InvariantCulture);
+                var y = double.Parse(strings[3], CultureInfo.InvariantCulture);
+                var z = double.Parse(strings[4], CultureInfo.InvariantCulture);
+                var batteryPower = strings[5];
+                var timestamp = double.Parse(strings[6], CultureInfo.InvariantCulture);
+                var unit = strings[7];
+                var dqi = strings[8];
+
+                if (Tags.All(tag => tag.Id != id))
+                {
+                    Tags.Add(new Tag(id, new List<ITimeCoordinate>()));
+                }
+
+                Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new TimeCoordinate(x, y, z, batteryPower, timestamp, unit, dqi));
+            }
+        }
+
+        private void DataLoadNewFormat(string[] newFormat)
+        {
+            foreach (var line in newFormat)
+            {
+                var strings = line.Split(',');
+
+                var id = strings[0];
+                var x = double.Parse(strings[1], CultureInfo.InvariantCulture);
+                var y = double.Parse(strings[2], CultureInfo.InvariantCulture);
+                var timestamp = DateTime.Parse(strings[3], CultureInfo.InvariantCulture);
+                
+                if (Tags.All(tag => tag.Id != id))
+                {
+                    Tags.Add(new Tag(id, new List<ITimeCoordinate>()));
+                }
+
+                Tags.First(tag => tag.Id == id).TimeCoordinates.Add(new NewTimeCoordinate(x, y, timestamp));
+            }
         }
     }
 }

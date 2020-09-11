@@ -121,7 +121,7 @@ namespace TimePicker.ViewModels
         private Task<Tag> CutTimeFromTag(Tag tag)
         {
             return Task.Run(() => {
-                var timeCoordinates = tag.TimeCoordinates.Where(x => x.Timestamp >= LowerTimeValue && x.Timestamp <= UpperTimeValue).ToList();
+                var timeCoordinates = tag.TimeCoordinates.Where(x => x.EpochTimestamp >= LowerTimeValue && x.EpochTimestamp <= UpperTimeValue).ToList();
                 return new Tag(tag.Id, timeCoordinates);
             });
         }
@@ -137,8 +137,8 @@ namespace TimePicker.ViewModels
             
             _lastTag = tag;
             
-            MaximumTime = _lastTag.TimeCoordinates.Max(x => x.Timestamp);
-            MinimumTime = _lastTag.TimeCoordinates.Min(x => x.Timestamp);
+            MaximumTime = _lastTag.TimeCoordinates.Max(x => x.EpochTimestamp);
+            MinimumTime = _lastTag.TimeCoordinates.Min(x => x.EpochTimestamp);
 
             UpperTimeValue = MaximumTime;
             LowerTimeValue = MinimumTime;

@@ -16,9 +16,9 @@ namespace Filters.Models
             Period = 15;
         }
 
-        public async Task<List<TimeCoordinate>> Filter(List<TimeCoordinate> originalData)
+        public async Task<List<ITimeCoordinate>> Filter(List<ITimeCoordinate> originalData)
         {
-            var movingAverage = new List<TimeCoordinate>();
+            var movingAverage = new List<ITimeCoordinate>();
             await Task.Run(() =>
             {
                 var bufferX = new double[Period];
@@ -37,7 +37,7 @@ namespace Filters.Models
                         maX += bufferX[j];
                         maY += bufferY[j];
                     }
-                    movingAverage.Add(new TimeCoordinate(maX, maY, point.Z, point.BatteryPower, point.Timestamp, point.Unit, point.DQI));
+                    movingAverage.Add(new NewTimeCoordinate(maX, maY, point.Timestamp));
                     currentIndex = (currentIndex + 1) % Period;
                 }
             });

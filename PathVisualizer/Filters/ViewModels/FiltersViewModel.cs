@@ -71,7 +71,7 @@ namespace Filters.ViewModels
 
             _addFilterViewModel = new AddFilterViewModel(eventAggregator);
 
-            _lastTag = new Tag("", new List<TimeCoordinate>());
+            _lastTag = new Tag("", new List<ITimeCoordinate>());
 
             _eventAggregator = eventAggregator;
 

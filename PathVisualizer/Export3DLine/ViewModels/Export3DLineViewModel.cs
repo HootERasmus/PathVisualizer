@@ -54,7 +54,7 @@ namespace Export3DLine.ViewModels
             await ConvertInto3D(_tag.TimeCoordinates, dialog.FileName);
         }
 
-        public static string DrawLine(TimeCoordinate first, TimeCoordinate second, int number)
+        public static string DrawLine(ITimeCoordinate first, ITimeCoordinate second, int number)
         {
             var stringBuilder = new StringBuilder();
             var constant = 1;
@@ -95,7 +95,7 @@ namespace Export3DLine.ViewModels
             return stringBuilder.ToString();
         }
 
-        public async Task ConvertInto3D(List<TimeCoordinate> dataPoints, string fileName)
+        public async Task ConvertInto3D(List<ITimeCoordinate> dataPoints, string fileName)
         {
             await Task.Run(() =>
             {
